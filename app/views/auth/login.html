@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio de sesión</title>
+    <link rel="stylesheet" href="/css/style.css">
+    
+</head>
+<body>
+
+<main class="login-container">
+    <h1>Bienvenido a tu cafetería</h1>
+    <p>Ingresa tus datos para acceder al sistema</p>
+
+    <form method="POST" action="?controller=auth&action=authenticate">
+        <label>
+            Correo electrónico
+            <input type="email" name="correo" required>
+        </label>
+
+        <label>
+            Contraseña
+            <input type="password" name="contrasena" required>
+        </label>
+
+        <button type="submit">Iniciar sesión</button>
+    </form>
+</main>
+
+</body>
+</html>
