@@ -1,188 +1,226 @@
-// ---------- CARRUSEL ----------
-let currentSlide = 0;
-const slides = document.querySelectorAll('.carousel-item');
-const totalSlides = slides.length;
+// main.js - Funcionalidades globales y accesibilidad
 
-function moveSlide(direction) {
-    currentSlide += direction;
-    if (currentSlide < 0) currentSlide = totalSlides - 1;
-    if (currentSlide >= totalSlides) currentSlide = 0;
-    document.querySelector('.carousel-inner').style.transform = `translateX(-${currentSlide * 100}%)`;
-}
+document.addEventListener('DOMContentLoaded', function() {
+    // ========== ACCESIBILIDAD ==========
+    const accessibilityBtn = document.getElementById('accessibilityBtn');
+    const accessibilityPanel = document.getElementById('accessibilityPanel');
+    const fontIncreaseBtn = document.getElementById('fontIncrease');
+    const fontDecreaseBtn = document.getElementById('fontDecrease');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const screenReaderBtn = document.getElementById('screenReader');
 
-// ---------- CARRITO LATERAL ----------
-const cartIcon = document.querySelector('.cart-icon');
-const cartSidebar = document.querySelector('.cart-sidebar');
-const closeCart = document.querySelector('.close-cart');
+    // Cargar preferencias guardadas
+    (function loadPreferences() {
+        // Tamaño de fuente
+        let fontSize = localStorage.getItem('fontSize');
+        if (fontSize) {
+            document.documentElement.style.fontSize = fontSize + 'px';
+        }
+        // Modo oscuro
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+    })();
 
-if (cartIcon) {
-    cartIcon.addEventListener('click', () => {
-        cartSidebar.classList.add('open');
-        actualizarCarrito();
-    });
-}
-if (closeCart) {
-    closeCart.addEventListener('click', () => {
-        cartSidebar.classList.remove('open');
-    });
-}
+    // Mostrar/ocultar panel de accesibilidad
+    if (accessibilityBtn && accessibilityPanel) {
+        accessibilityBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const expanded = this.getAttribute('aria-expanded') === 'true' ? false : true;
+            this.setAttribute('aria-expanded', expanded);
+            accessibilityPanel.hidden = !expanded;
+        });
 
-// ---------- AGREGAR AL CARRITO (AJAX) ----------
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('add-btn')) {
-        e.preventDefault();
-        const btn = e.target;
-        const productId = btn.dataset.id;
-        const card = btn.closest('.product-card');
-        const quantityElem = card.querySelector('.qty');
-        const quantity = quantityElem ? parseInt(quantityElem.innerText) : 1;
-
-        fetch('/carrito/agregar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `producto_id=${productId}&cantidad=${quantity}`
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                card.classList.add('added-animation');
-                setTimeout(() => card.classList.remove('added-animation'), 500);
-                actualizarCarrito();
-            } else if (data.error === 'No autenticado') {
-                alert('Debes iniciar sesión para agregar productos al carrito');
-                window.location.href = '/login';
+        // Cerrar al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (!accessibilityBtn.contains(e.target) && !accessibilityPanel.contains(e.target)) {
+                accessibilityBtn.setAttribute('aria-expanded', 'false');
+                accessibilityPanel.hidden = true;
             }
         });
     }
-});
 
-// ---------- ACTUALIZAR CARRITO ----------
-function actualizarCarrito() {
-    fetch('/carrito/obtener')
-        .then(res => res.json())
-        .then(items => {
-            const cartContainer = document.querySelector('.cart-items');
-            const subtotalSpan = document.getElementById('cart-subtotal');
-            const ivaSpan = document.getElementById('cart-iva');
-            const totalSpan = document.getElementById('cart-total');
-            if (!cartContainer) return;
-
-            let html = '';
-            let subtotal = 0;
-            items.forEach(item => {
-                subtotal += item.precio * item.cantidad;
-                html += `
-                    <div class="cart-item" data-item-id="${item.id}">
-                        <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=100" alt="${item.nombre}">
-                        <div class="cart-item-details">
-                            <div class="cart-item-name">${item.nombre}</div>
-                            <div class="cart-item-price">$${item.precio.toFixed(2)}</div>
-                            <div class="cart-item-quantity">
-                                <button class="qty-minus" data-item-id="${item.id}">-</button>
-                                <span class="qty">${item.cantidad}</span>
-                                <button class="qty-plus" data-item-id="${item.id}">+</button>
-                                <i class="fas fa-trash remove-item" data-item-id="${item.id}"></i>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            cartContainer.innerHTML = html || '<p style="text-align:center;">Carrito vacío</p>';
-            const iva = subtotal * 0.16;
-            const total = subtotal + iva;
-            if (subtotalSpan) subtotalSpan.innerText = `$${subtotal.toFixed(2)}`;
-            if (ivaSpan) ivaSpan.innerText = `$${iva.toFixed(2)}`;
-            if (totalSpan) totalSpan.innerText = `$${total.toFixed(2)}`;
+    // Aumentar fuente
+    if (fontIncreaseBtn) {
+        fontIncreaseBtn.addEventListener('click', function() {
+            let current = parseInt(localStorage.getItem('fontSize') || 16);
+            if (current < 24) {
+                current += 2;
+                document.documentElement.style.fontSize = current + 'px';
+                localStorage.setItem('fontSize', current);
+            }
         });
-}
-
-// ---------- MODIFICAR CANTIDAD / ELIMINAR DESDE CARRITO ----------
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('qty-plus')) {
-        const itemId = e.target.dataset.itemId;
-        const qtySpan = e.target.parentElement.querySelector('.qty');
-        let qty = parseInt(qtySpan.innerText);
-        qty++;
-        fetch('/carrito/actualizar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `item_id=${itemId}&cantidad=${qty}`
-        }).then(() => actualizarCarrito());
     }
 
-    if (e.target.classList.contains('qty-minus')) {
-        const itemId = e.target.dataset.itemId;
-        const qtySpan = e.target.parentElement.querySelector('.qty');
-        let qty = parseInt(qtySpan.innerText);
-        if (qty > 1) {
-            qty--;
-            fetch('/carrito/actualizar', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `item_id=${itemId}&cantidad=${qty}`
-            }).then(() => actualizarCarrito());
-        }
+    // Disminuir fuente
+    if (fontDecreaseBtn) {
+        fontDecreaseBtn.addEventListener('click', function() {
+            let current = parseInt(localStorage.getItem('fontSize') || 16);
+            if (current > 12) {
+                current -= 2;
+                document.documentElement.style.fontSize = current + 'px';
+                localStorage.setItem('fontSize', current);
+            }
+        });
     }
 
-    if (e.target.classList.contains('remove-item')) {
-        const itemId = e.target.dataset.itemId;
-        fetch('/carrito/eliminar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `item_id=${itemId}`
-        }).then(() => actualizarCarrito());
+    // Alternar modo oscuro/claro
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+        });
     }
-});
 
-// ---------- ACCESIBILIDAD ----------
-const accessBtn = document.querySelector('.accessibility-btn');
-const accessMenu = document.querySelector('.accessibility-menu');
+    // Leer pantalla con Web Speech API
+    if (screenReaderBtn) {
+        screenReaderBtn.addEventListener('click', function() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const mainContent = document.querySelector('.main-content');
+                let text = mainContent ? mainContent.innerText : document.body.innerText;
+                text = text.replace(/\s+/g, ' ').trim();
+                if (text.length > 0) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'es-ES';
+                    utterance.rate = 1;
+                    utterance.pitch = 1;
+                    utterance.volume = 1;
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    alert('No hay contenido para leer.');
+                }
+            } else {
+                alert('Lo sentimos, tu navegador no soporta la lectura por voz.');
+            }
+        });
+    }
 
-if (accessBtn) {
-    accessBtn.addEventListener('click', () => {
-        accessMenu.classList.toggle('show');
+    // ========== NUEVO CARRUSEL (estilo slide con vista previa) ==========
+    (function() {
+        const next = document.querySelector('.carousel-next');
+        const prev = document.querySelector('.carousel-prev');
+        const slides = document.querySelector('.carousel-new .slides');
+
+        if (!next || !prev || !slides) return;
+
+        next.addEventListener('click', function() {
+            const items = document.querySelectorAll('.carousel-new .slide-item');
+            if (items.length) {
+                slides.appendChild(items[0]); // Mueve el primer item al final
+            }
+        });
+
+        prev.addEventListener('click', function() {
+            const items = document.querySelectorAll('.carousel-new .slide-item');
+            if (items.length) {
+                slides.prepend(items[items.length - 1]); // Mueve el último al principio
+            }
+        });
+    })();
+
+    // ========== FUNCIONALIDAD ADICIONAL ==========
+    
+    // Confirmación antes de eliminar item del carrito
+    const removeLinks = document.querySelectorAll('.remove-link');
+    removeLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (!confirm('¿Estás seguro de eliminar este producto del carrito?')) {
+                e.preventDefault();
+            }
+        });
     });
-}
 
-document.addEventListener('click', (e) => {
-    if (accessMenu && accessMenu.classList.contains('show')) {
-        if (!accessMenu.contains(e.target) && !accessBtn.contains(e.target)) {
-            accessMenu.classList.remove('show');
+    // Auto-ocultar alertas después de 5 segundos
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+            setTimeout(() => {
+                alert.remove();
+            }, 500);
+        }, 5000);
+    });
+    
+    // ========== CARRUSEL (estilo slide con vista previa) ==========
+(function() {
+    const next = document.querySelector('.carousel-next');
+    const prev = document.querySelector('.carousel-prev');
+    const slides = document.querySelector('.carousel-new .slides');
+    
+    if (!next || !prev || !slides) return;
+
+    // Función para actualizar la clase 'main' al slide que está en segunda posición
+    function updateMainSlide() {
+        const items = document.querySelectorAll('.carousel-new .slide-item');
+        items.forEach((item, index) => {
+            if (index === 1) {
+                item.classList.add('main');
+            } else {
+                item.classList.remove('main');
+            }
+        });
+    }
+
+    // Rotar hacia adelante (siguiente)
+    function moveNext() {
+        const items = document.querySelectorAll('.carousel-new .slide-item');
+        if (items.length) {
+            slides.appendChild(items[0]);
+            updateMainSlide();
         }
     }
-});
 
-// Dark Mode
-document.getElementById('darkModeToggle')?.addEventListener('click', function() {
-    document.body.classList.toggle('dark-mode');
-    const icon = document.querySelector('.accessibility-btn i');
-    if (document.body.classList.contains('dark-mode')) {
-        icon.classList.remove('fa-universal-access');
-        icon.classList.add('fa-sun');
-    } else {
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-universal-access');
+    // Rotar hacia atrás (anterior)
+    function movePrev() {
+        const items = document.querySelectorAll('.carousel-new .slide-item');
+        if (items.length) {
+            slides.prepend(items[items.length - 1]);
+            updateMainSlide();
+        }
     }
-});
 
-// Aumentar fuente
-let fontSize = 16;
-document.getElementById('increaseFont')?.addEventListener('click', function() {
-    fontSize += 2;
-    if (fontSize > 30) fontSize = 30;
-    document.documentElement.style.fontSize = fontSize + 'px';
-});
+    // Función para mover un slide específico a la posición principal (segundo lugar)
+    function moveSlideToMain(targetSlide) {
+        const items = Array.from(document.querySelectorAll('.carousel-new .slide-item'));
+        const targetIndex = items.indexOf(targetSlide);
+        if (targetIndex === -1 || targetIndex === 1) return; // Ya está en principal
 
-// Leer pantalla
-document.getElementById('readScreen')?.addEventListener('click', function() {
-    const text = document.body.innerText;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'es-ES';
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-});
+        if (targetIndex < 1) {
+            // El slide está antes de la posición principal: necesitamos rotar hacia atrás
+            const steps = 1 - targetIndex; // cuántas veces hacia atrás
+            for (let i = 0; i < steps; i++) {
+                movePrev();
+            }
+        } else {
+            // El slide está después: rotar hacia adelante
+            const steps = targetIndex - 1;
+            for (let i = 0; i < steps; i++) {
+                moveNext();
+            }
+        }
+    }
 
-// Inicializar carrito si existe
-if (document.querySelector('.cart-sidebar')) {
-    actualizarCarrito();
-}
+    // Eventos de botones
+    next.addEventListener('click', moveNext);
+    prev.addEventListener('click', movePrev);
+
+    // Inicializar la clase 'main' al primer slide principal
+    updateMainSlide();
+
+    // Delegación de eventos para clics en los slides
+    slides.addEventListener('click', function(e) {
+        // Buscar si el clic fue en un .slide-item o en su interior
+        const slide = e.target.closest('.slide-item');
+        if (slide) {
+            // Si el clic fue en el botón "Ver detalles", no queremos cambiar el slide
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.tagName === 'A' || e.target.closest('a')) {
+                return; // Dejar que el enlace funcione normalmente
+            }
+            moveSlideToMain(slide);
+        }
+    });
+})();
+});

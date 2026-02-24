@@ -1,79 +1,119 @@
 <?php
 session_start();
 
+// Definir constantes de ruta
+define('BASE_PATH', dirname(__DIR__));
+define('APP_PATH', BASE_PATH . '/app');
+
+// Autocarga simple de clases (controladores y modelos)
+spl_autoload_register(function ($class) {
+    $file = APP_PATH . '/controllers/' . $class . '.php';
+    if (file_exists($file)) { require_once $file; return true; }
+    $file = APP_PATH . '/models/' . $class . '.php';
+    if (file_exists($file)) { require_once $file; return true; }
+    return false;
+});
+
+// --- MODO 1: Parámetros explícitos (index.php?controller=...&action=...) ---
+if (isset($_GET['controller']) && isset($_GET['action'])) {
+    $controllerName = ucfirst(strtolower($_GET['controller'])) . 'Controller';
+    $actionName = $_GET['action'];
+    $id = $_GET['id'] ?? null;
+
+    if (!class_exists($controllerName)) {
+        die("Controlador no encontrado");
+    }
+    $controller = new $controllerName();
+    if (!method_exists($controller, $actionName)) {
+        die("Acción no encontrada");
+    }
+    if ($id !== null) {
+        $controller->$actionName($id);
+    } else {
+        $controller->$actionName();
+    }
+    exit;
+}
+
+// --- MODO 2: Rutas amigables (path) ---
+$base = '/Proyecto_cafe/public';
 $request = $_SERVER['REQUEST_URI'];
+$request = str_replace($base, '', $request);
 $request = strtok($request, '?');
+if ($request == '') {
+    $request = '/';
+}
 
 switch ($request) {
     case '/':
     case '/welcome':
-        require_once __DIR__ . '/../app/controllers/ProductoController.php';
-        $controller = new ProductoController();
-        $controller->destacados();
+        $controller = new WelcomeController();
+        $controller->index();
         break;
 
     case '/categorias':
-        require_once __DIR__ . '/../app/controllers/CategoriaController.php';
         $controller = new CategoriaController();
         $controller->index();
         break;
 
+    case (preg_match('/^\/categoria\/(\d+)$/', $request, $matches) ? true : false):
+        $controller = new CategoriaController();
+        $controller->show($matches[1]);
+        break;
+
     case '/productos':
-        require_once __DIR__ . '/../app/controllers/ProductoController.php';
         $controller = new ProductoController();
-        $controller->porCategoria();
+        $controller->index();
+        break;
+
+    case (preg_match('/^\/producto\/(\d+)$/', $request, $matches) ? true : false):
+        $controller = new ProductoController();
+        $controller->show($matches[1]);
         break;
 
     case '/reserva':
-        require_once __DIR__ . '/../app/controllers/ReservaController.php';
         $controller = new ReservaController();
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $controller->guardar();
-        } else {
-            $controller->formulario();
-        }
+        $controller->index();
+        break;
+
+    case '/reserva/guardar':
+        $controller = new ReservaController();
+        $controller->store();
         break;
 
     case '/login':
-        require_once __DIR__ . '/../app/controllers/AuthController.php';
         $controller = new AuthController();
-        $controller->login();
+        $controller->showLoginForm();
         break;
 
     case '/registro':
-        require_once __DIR__ . '/../app/controllers/AuthController.php';
         $controller = new AuthController();
-        $controller->registro();
+        $controller->showRegisterForm();
         break;
 
     case '/logout':
-        require_once __DIR__ . '/../app/controllers/AuthController.php';
         $controller = new AuthController();
         $controller->logout();
         break;
 
+    case '/carrito':
+        $controller = new CarritoController();
+        $controller->ver();
+        break;
+
     case '/carrito/agregar':
-        require_once __DIR__ . '/../app/controllers/CarritoController.php';
         $controller = new CarritoController();
         $controller->agregar();
         break;
 
-    case '/carrito/obtener':
-        require_once __DIR__ . '/../app/controllers/CarritoController.php';
-        $controller = new CarritoController();
-        $controller->obtener();
-        break;
-
     case '/carrito/actualizar':
-        require_once __DIR__ . '/../app/controllers/CarritoController.php';
         $controller = new CarritoController();
         $controller->actualizar();
         break;
 
     case '/carrito/eliminar':
-        require_once __DIR__ . '/../app/controllers/CarritoController.php';
         $controller = new CarritoController();
-        $controller->eliminar();
+        $controller->quitar();
         break;
 
     default:

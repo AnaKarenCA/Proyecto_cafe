@@ -3,13 +3,32 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/index.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/docker/docker-compose.yml</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/config/database.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/auth/login.html</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/AuthController/login.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/AuthController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/CategoriaController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/ProductoController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/CarritoController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/ReservaController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/WelcomeController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Usuario.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Categoria.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Producto.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Carrito.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Reserva.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/header.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/menu.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/footer.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/auth/login.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/auth/registro.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/welcome.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/categorias.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/productos.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/reserva.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/carrito.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/carrito.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/index.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/style.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/js/main.js</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/docker/init/01_init.sql</file>
         </group>
     </open-files>
 </project-private>

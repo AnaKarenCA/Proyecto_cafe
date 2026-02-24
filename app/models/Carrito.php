@@ -1,60 +1,108 @@
 <?php
-require_once __DIR__ . '/../../config/database.php';
-
 class Carrito {
-    public static function agregar($usuario_id, $producto_id, $cantidad = 1) {
-        $db = Database::connect();
-        $stmt = $db->prepare("SELECT * FROM carrito WHERE usuario_id = :uid AND producto_id = :pid");
-        $stmt->bindParam(':uid', $usuario_id, PDO::PARAM_INT);
-        $stmt->bindParam(':pid', $producto_id, PDO::PARAM_INT);
-        $stmt->execute();
-        $item = $stmt->fetch();
-        if ($item) {
-            $stmt = $db->prepare("UPDATE carrito SET cantidad = cantidad + :cant WHERE id = :id");
-            $stmt->bindParam(':cant', $cantidad, PDO::PARAM_INT);
-            $stmt->bindParam(':id', $item['id'], PDO::PARAM_INT);
-            return $stmt->execute();
-        } else {
-            $stmt = $db->prepare("INSERT INTO carrito (usuario_id, producto_id, cantidad) VALUES (:uid, :pid, :cant)");
-            $stmt->bindParam(':uid', $usuario_id, PDO::PARAM_INT);
-            $stmt->bindParam(':pid', $producto_id, PDO::PARAM_INT);
-            $stmt->bindParam(':cant', $cantidad, PDO::PARAM_INT);
-            return $stmt->execute();
+
+    /**
+     * Inicializa el carrito en sesión si no existe
+     */
+    public static function init() {
+        if (!isset($_SESSION['carrito'])) {
+            $_SESSION['carrito'] = [];
         }
     }
 
-    public static function obtener($usuario_id) {
-        $db = Database::connect();
-        $stmt = $db->prepare("
-            SELECT c.*, p.nombre, p.precio, p.imagen 
-            FROM carrito c
-            JOIN productos p ON c.producto_id = p.id
-            WHERE c.usuario_id = :uid
-        ");
-        $stmt->bindParam(':uid', $usuario_id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll();
+    /**
+     * Obtiene el contenido del carrito
+     */
+    public static function getContenido() {
+        self::init();
+        return $_SESSION['carrito'];
     }
 
-    public static function actualizarCantidad($item_id, $cantidad) {
-        $db = Database::connect();
-        $stmt = $db->prepare("UPDATE carrito SET cantidad = :cant WHERE id = :id");
-        $stmt->bindParam(':cant', $cantidad, PDO::PARAM_INT);
-        $stmt->bindParam(':id', $item_id, PDO::PARAM_INT);
-        return $stmt->execute();
+    /**
+     * Agrega un producto al carrito (o incrementa cantidad)
+     * @param int $id_producto
+     * @param string $nombre
+     * @param float $precio
+     * @param int $cantidad
+     * @param string $imagen (opcional)
+     */
+    public static function agregar($id_producto, $nombre, $precio, $cantidad = 1, $imagen = '') {
+        self::init();
+        $encontrado = false;
+        foreach ($_SESSION['carrito'] as &$item) {
+            if ($item['id'] == $id_producto) {
+                $item['cantidad'] += $cantidad;
+                $encontrado = true;
+                break;
+            }
+        }
+        if (!$encontrado) {
+            $_SESSION['carrito'][] = [
+                'id' => $id_producto,
+                'nombre' => $nombre,
+                'precio' => $precio,
+                'cantidad' => $cantidad,
+                'imagen' => $imagen
+            ];
+        }
     }
 
-    public static function eliminar($item_id) {
-        $db = Database::connect();
-        $stmt = $db->prepare("DELETE FROM carrito WHERE id = :id");
-        $stmt->bindParam(':id', $item_id, PDO::PARAM_INT);
-        return $stmt->execute();
+    /**
+     * Actualiza la cantidad de un producto específico
+     */
+    public static function actualizarCantidad($id_producto, $nueva_cantidad) {
+        self::init();
+        foreach ($_SESSION['carrito'] as &$item) {
+            if ($item['id'] == $id_producto) {
+                if ($nueva_cantidad <= 0) {
+                    self::quitar($id_producto);
+                } else {
+                    $item['cantidad'] = $nueva_cantidad;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
-    public static function limpiar($usuario_id) {
-        $db = Database::connect();
-        $stmt = $db->prepare("DELETE FROM carrito WHERE usuario_id = :uid");
-        $stmt->bindParam(':uid', $usuario_id, PDO::PARAM_INT);
-        return $stmt->execute();
+    /**
+     * Elimina un producto del carrito
+     */
+    public static function quitar($id_producto) {
+        self::init();
+        $_SESSION['carrito'] = array_filter($_SESSION['carrito'], function($item) use ($id_producto) {
+            return $item['id'] != $id_producto;
+        });
+    }
+
+    /**
+     * Vacía el carrito
+     */
+    public static function vaciar() {
+        $_SESSION['carrito'] = [];
+    }
+
+    /**
+     * Calcula el total del carrito
+     */
+    public static function total() {
+        self::init();
+        $total = 0;
+        foreach ($_SESSION['carrito'] as $item) {
+            $total += $item['precio'] * $item['cantidad'];
+        }
+        return $total;
+    }
+
+    /**
+     * Cuenta el número de productos (suma de cantidades)
+     */
+    public static function contarItems() {
+        self::init();
+        $count = 0;
+        foreach ($_SESSION['carrito'] as $item) {
+            $count += $item['cantidad'];
+        }
+        return $count;
     }
 }

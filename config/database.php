@@ -1,10 +1,11 @@
 <?php
 class Database {
-    private static $host = "127.0.0.1";
-    private static $db   = "cafeteria_escolar";
+private static $host = "127.0.0.1";
+private static $port = 3307;
+private static $db   = "cafeteria_accesible";
     private static $user = "cafe_user";
     private static $pass = "cafe_pass";
-    private static $port = 3308;
+
 
     public static function connect() {
         try {
