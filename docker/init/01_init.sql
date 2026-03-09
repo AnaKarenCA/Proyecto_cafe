@@ -1,220 +1,379 @@
 -- =====================================================
--- Base de datos para el sistema de cafetería accesible
--- Nombre: cafeteria_accesible
--- Juego de caracteres: utf8mb4 (soporta emojis y acentos)
+-- Base de datos: cafeteria_accesible
+-- Reinicio completo orientado a IHC
 -- =====================================================
-CREATE DATABASE IF NOT EXISTS cafeteria_accesible
+
+DROP DATABASE IF EXISTS cafeteria_accesible;
+
+CREATE DATABASE cafeteria_accesible
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
 USE cafeteria_accesible;
 
 -- =====================================================
--- Tabla: usuarios
--- Almacena los datos de los clientes registrados.
--- Permite autenticación y asociación con pedidos/reservas.
+-- USUARIOS
 -- =====================================================
 CREATE TABLE usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
-    cuenta VARCHAR(50) NOT NULL UNIQUE COMMENT 'Nombre de usuario para login',
+    cuenta VARCHAR(50) NOT NULL UNIQUE,
     nombre VARCHAR(100) NOT NULL,
     apellido_paterno VARCHAR(100),
     apellido_materno VARCHAR(100),
     correo VARCHAR(100) NOT NULL UNIQUE,
-    contrasena VARCHAR(255) NOT NULL COMMENT 'Hash de la contraseña (password_hash)',
+    contrasena VARCHAR(255) NOT NULL,
     telefono VARCHAR(20),
     activo BOOLEAN DEFAULT TRUE,
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ultimo_acceso TIMESTAMP NULL,
-    INDEX idx_correo (correo)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ultimo_acceso TIMESTAMP NULL
+) ENGINE=InnoDB;
 
 -- =====================================================
--- Tabla: categorias
--- Clasificación de los productos del menú.
+-- CONFIGURACIÓN DE USUARIO (tema claro / oscuro)
+-- =====================================================
+CREATE TABLE usuario_configuracion (
+    id_usuario INT PRIMARY KEY,
+    tema ENUM('claro','oscuro') DEFAULT 'claro',
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+) ENGINE=InnoDB;
+
+-- =====================================================
+-- CATEGORÍAS
 -- =====================================================
 CREATE TABLE categorias (
     id_categoria INT AUTO_INCREMENT PRIMARY KEY,
     nombre_categoria VARCHAR(50) NOT NULL UNIQUE,
     descripcion TEXT,
-    icono VARCHAR(100) COMMENT 'Clase CSS o ruta del icono',
+    icono VARCHAR(100),
     orden INT DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- =====================================================
--- Tabla: emociones (opcional)
--- Asocia productos con estados de ánimo para recomendaciones.
+-- ALÉRGENOS
 -- =====================================================
-CREATE TABLE emociones (
-    id_emocion INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_emocion VARCHAR(50) NOT NULL UNIQUE,
-    descripcion VARCHAR(255)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE alergeno (
+    id_alergeno INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_alergeno VARCHAR(50) NOT NULL UNIQUE,
+    descripcion VARCHAR(255),
+    icono VARCHAR(100)
+) ENGINE=InnoDB;
 
 -- =====================================================
--- Tabla: productos
--- Catálogo de productos de la cafetería.
+-- PRODUCTOS
 -- =====================================================
 CREATE TABLE productos (
     id_producto INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     descripcion TEXT,
-    precio DECIMAL(10,2) NOT NULL CHECK (precio >= 0),
+    precio_base DECIMAL(10,2) NOT NULL,
     id_categoria INT NOT NULL,
-    id_emocion INT NULL,
-    imagen VARCHAR(255) COMMENT 'Ruta de la imagen del producto',
+    imagen VARCHAR(255),
     disponible BOOLEAN DEFAULT TRUE,
-    destacado BOOLEAN DEFAULT FALSE COMMENT 'Para productos destacados en inicio',
+    destacado BOOLEAN DEFAULT FALSE,
     fecha_alta TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (id_emocion) REFERENCES emociones(id_emocion) ON DELETE SET NULL ON UPDATE CASCADE,
-    INDEX idx_categoria (id_categoria),
-    INDEX idx_emocion (id_emocion)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+) ENGINE=InnoDB;
 
 -- =====================================================
--- Tabla: reservas
--- Permite a usuarios (registrados o invitados) reservar mesa.
+-- RELACIÓN PRODUCTO - ALÉRGENO
 -- =====================================================
-CREATE TABLE reservas (
-    id_reserva INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NULL COMMENT 'NULL si el cliente no está registrado',
-    nombre_cliente VARCHAR(100) NOT NULL COMMENT 'Nombre de quien reserva',
-    email_cliente VARCHAR(100) NOT NULL,
-    telefono_cliente VARCHAR(20),
-    fecha_reserva DATE NOT NULL,
-    hora_reserva TIME NOT NULL,
-    num_personas INT NOT NULL CHECK (num_personas > 0),
-    comentarios TEXT,
-    fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    estado ENUM('pendiente', 'confirmada', 'cancelada') DEFAULT 'pendiente',
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE SET NULL ON UPDATE CASCADE,
-    INDEX idx_fecha (fecha_reserva),
-    INDEX idx_estado (estado)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- =====================================================
--- Tabla: pedidos
--- Cabecera de los pedidos realizados (checkout).
--- =====================================================
-CREATE TABLE pedidos (
-    id_pedido INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NOT NULL COMMENT 'Usuario que realizó el pedido (debe estar registrado para pedidos)',
-    fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    total DECIMAL(10,2) NOT NULL CHECK (total >= 0),
-    estado ENUM('pendiente', 'preparando', 'listo', 'entregado', 'cancelado') DEFAULT 'pendiente',
-    metodo_pago VARCHAR(50),
-    comentarios TEXT,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE RESTRICT ON UPDATE CASCADE,
-    INDEX idx_usuario (id_usuario),
-    INDEX idx_estado_pedido (estado)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- =====================================================
--- Tabla: detalle_pedido
--- Líneas de detalle de cada pedido.
--- =====================================================
-CREATE TABLE detalle_pedido (
-    id_detalle INT AUTO_INCREMENT PRIMARY KEY,
-    id_pedido INT NOT NULL,
+CREATE TABLE producto_alergeno (
     id_producto INT NOT NULL,
-    cantidad INT NOT NULL CHECK (cantidad > 0),
-    precio_unitario DECIMAL(10,2) NOT NULL CHECK (precio_unitario >= 0),
-    subtotal DECIMAL(10,2) GENERATED ALWAYS AS (cantidad * precio_unitario) STORED,
-    FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE RESTRICT ON UPDATE CASCADE,
-    INDEX idx_pedido (id_pedido)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    id_alergeno INT NOT NULL,
+    PRIMARY KEY (id_producto, id_alergeno),
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE,
+    FOREIGN KEY (id_alergeno) REFERENCES alergeno(id_alergeno) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- =====================================================
--- INSERCIÓN DE DATOS INICIALES
+-- TAMAÑOS
 -- =====================================================
+CREATE TABLE tamanos (
+    id_tamano INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_tamano VARCHAR(50) NOT NULL,
+    incremento_precio DECIMAL(10,2) DEFAULT 0
+) ENGINE=InnoDB;
 
--- Categorías (basadas en la imagen y necesidades comunes)
-INSERT INTO categorias (nombre_categoria, descripcion, orden) VALUES
-('Bebidas Calientes', 'Cafés, tés y chocolate', 1),
-('Bebidas Frías', 'Frappés, smoothies, cold brew', 2),
-('Repostería', 'Pasteles, galletas, muffins', 3),
-('Comida', 'Sándwiches, ensaladas, snacks salados', 4),
-('Especiales', 'Productos de temporada o edición limitada', 5);
-
--- Emociones (para posibles recomendaciones)
-INSERT INTO emociones (nombre_emocion, descripcion) VALUES
-('Feliz', 'Productos que transmiten alegría'),
-('Cansado', 'Productos energizantes o reconfortantes'),
-('Neutro', 'Productos para cualquier momento'),
-('Relajado', 'Bebidas suaves y relajantes');
-
--- Productos (basados en la imagen: Signature Drinks y Best Sellers)
-INSERT INTO productos (nombre, descripcion, precio, id_categoria, id_emocion, imagen, destacado) VALUES
-('Caviar Latte', 'Una mezcla perfecta de espresso y leche. Disponible en dos tamaños.', 45.00, 1, 2, 'caviar_latte.jpg', TRUE),
-('Mocha Hazelnut', 'Una rica y aterciopelada bebida de chocolate con avellana.', 50.00, 1, 1, 'mocha_hazelnut.jpg', TRUE),
-('Coffee Frappuccino', 'Una refrescante mezcla de café y helado.', 55.00, 2, 1, 'coffee_frapp.jpg', TRUE),
-('Choco Cacao', 'Deliciosa combinación de cacao y chocolate.', 48.00, 2, 3, 'choco_cacao.jpg', TRUE),
-('Cocoa Latte', 'Una cremosa mezcla de café y chocolate.', 52.00, 1, 4, 'cocoa_latte.jpg', TRUE),
-('Cocoa Frappuccino', 'Refrescante mezcla de café y chocolate con hielo.', 58.00, 2, 1, 'cocoa_frapp.jpg', FALSE),
-('Espresso Simple', 'Café puro y concentrado.', 25.00, 1, 2, 'espresso.jpg', FALSE),
-('Té Verde', 'Infusión natural de hojas de té verde.', 30.00, 1, 4, 'te_verde.jpg', FALSE),
-('Sandwich de Pollo', 'Pan integral con pollo, lechuga y tomate.', 65.00, 4, 3, 'sandwich_pollo.jpg', TRUE),
-('Galleta de Chocolate', 'Galleta artesanal con chispas de chocolate.', 15.00, 3, 1, 'galleta_choco.jpg', TRUE);
-
--- Usuario de prueba (contraseña: 'admin123' hasheada con password_hash)
--- El hash aquí es solo un ejemplo; en producción se debe generar con password_hash().
-INSERT INTO usuarios (cuenta, nombre, apellido_paterno, correo, contrasena, telefono, activo)
-VALUES ('admin', 'Administrador', 'Sistema', 'admin@cafe.com', '$2y$10$YourHashHere', '5551234567', TRUE);
-
--- NOTA: Reemplazar el hash por uno real generado con:
--- php -r "echo password_hash('admin123', PASSWORD_DEFAULT);"
-
--- Reserva de ejemplo (opcional)
-INSERT INTO reservas (id_usuario, nombre_cliente, email_cliente, telefono_cliente, fecha_reserva, hora_reserva, num_personas, comentarios, estado)
-VALUES (1, 'Admin Prueba', 'admin@cafe.com', '5551234567', CURDATE() + INTERVAL 1 DAY, '13:00:00', 4, 'Mesa cerca de ventana', 'confirmada');
+CREATE TABLE producto_tamano (
+    id_producto INT NOT NULL,
+    id_tamano INT NOT NULL,
+    PRIMARY KEY (id_producto, id_tamano),
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE,
+    FOREIGN KEY (id_tamano) REFERENCES tamanos(id_tamano) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- =====================================================
--- FIN DEL SCRIPT
+-- EXTRAS
 -- =====================================================
+CREATE TABLE extras (
+    id_extra INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_extra VARCHAR(50) NOT NULL,
+    precio_extra DECIMAL(10,2) DEFAULT 0
+) ENGINE=InnoDB;
+
+CREATE TABLE producto_extra (
+    id_producto INT NOT NULL,
+    id_extra INT NOT NULL,
+    PRIMARY KEY (id_producto, id_extra),
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE,
+    FOREIGN KEY (id_extra) REFERENCES extras(id_extra) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 -- =====================================================
--- Tabla: climas
+-- CLIMAS (RECOMENDACIÓN)
 -- =====================================================
 CREATE TABLE climas (
     id_clima INT AUTO_INCREMENT PRIMARY KEY,
     nombre_clima VARCHAR(50) NOT NULL UNIQUE,
     descripcion VARCHAR(255)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
--- =====================================================
--- Tabla: producto_clima (relación muchos a muchos)
--- =====================================================
 CREATE TABLE producto_clima (
     id_producto INT NOT NULL,
     id_clima INT NOT NULL,
     PRIMARY KEY (id_producto, id_clima),
     FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE,
     FOREIGN KEY (id_clima) REFERENCES climas(id_clima) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
--- Insertar climas
+-- =====================================================
+-- PEDIDOS
+-- =====================================================
+CREATE TABLE pedidos (
+    id_pedido INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total DECIMAL(10,2) NOT NULL,
+    estado ENUM('pendiente','preparando','listo','entregado','cancelado') DEFAULT 'pendiente',
+    metodo_pago VARCHAR(50),
+    comentarios TEXT,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+) ENGINE=InnoDB;
+
+CREATE TABLE detalle_pedido (
+    id_detalle INT AUTO_INCREMENT PRIMARY KEY,
+    id_pedido INT NOT NULL,
+    id_producto INT NOT NULL,
+    id_tamano INT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2),
+    FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido) ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto),
+    FOREIGN KEY (id_tamano) REFERENCES tamanos(id_tamano)
+) ENGINE=InnoDB;
+
+CREATE TABLE detalle_extra (
+    id_detalle INT NOT NULL,
+    id_extra INT NOT NULL,
+    PRIMARY KEY (id_detalle, id_extra),
+    FOREIGN KEY (id_detalle) REFERENCES detalle_pedido(id_detalle) ON DELETE CASCADE,
+    FOREIGN KEY (id_extra) REFERENCES extras(id_extra)
+) ENGINE=InnoDB;
+
+-- =====================================================
+-- PREFERENCIAS DEL USUARIO (HÁBITOS)
+-- =====================================================
+CREATE TABLE usuario_preferencias (
+    id_usuario INT NOT NULL,
+    id_producto INT NOT NULL,
+    total_consumido INT DEFAULT 0,
+    ultima_vez TIMESTAMP,
+    PRIMARY KEY (id_usuario, id_producto),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+) ENGINE=InnoDB;
+
+
+-- =====================================================
+-- DATOS INICIALES
+-- =====================================================
+
+-- -----------------------------------------------------
+-- CATEGORÍAS
+-- -----------------------------------------------------
+INSERT INTO categorias (nombre_categoria, descripcion, icono, orden) VALUES
+('Bebidas Calientes', 'Cafés, tés y chocolate', 'local_cafe', 1),
+('Bebidas Frías', 'Frappés y bebidas con hielo', 'ac_unit', 2),
+('Repostería', 'Pasteles y galletas', 'bakery_dining', 3),
+('Comida', 'Sándwiches y snacks', 'lunch_dining', 4);
+
+-- -----------------------------------------------------
+-- ALÉRGENOS
+-- -----------------------------------------------------
+INSERT INTO alergeno (nombre_alergeno, descripcion, icono) VALUES
+('Leche', 'Contiene derivados lácteos', 'local_drink'),
+('Gluten', 'Contiene trigo o harinas', 'grass'),
+('Frutos Secos', 'Contiene nueces o almendras', 'spa'),
+('Chocolate', 'Contiene cacao', 'cookie');
+
+-- -----------------------------------------------------
+-- TAMAÑOS
+-- -----------------------------------------------------
+INSERT INTO tamanos (nombre_tamano, incremento_precio) VALUES
+('Chico', 0),
+('Mediano', 5),
+('Grande', 10);
+
+-- -----------------------------------------------------
+-- EXTRAS
+-- -----------------------------------------------------
+INSERT INTO extras (nombre_extra, precio_extra) VALUES
+('Chispas de chocolate', 5),
+('Crema batida', 7),
+('Leche deslactosada', 6),
+('Shot extra de espresso', 8);
+
+-- -----------------------------------------------------
+-- PRODUCTOS
+-- -----------------------------------------------------
+INSERT INTO productos (nombre, descripcion, precio_base, id_categoria, imagen, destacado) VALUES
+('Caviar Latte', 'Mezcla perfecta de espresso y leche.', 45.00, 1, 'caviar_latte.jpg', TRUE),
+('Mocha Hazelnut', 'Chocolate con avellana.', 50.00, 1, 'mocha_hazelnut.jpg', TRUE),
+('Coffee Frappuccino', 'Refrescante mezcla de café y hielo.', 55.00, 2, 'coffee_frapp.jpg', TRUE),
+('Choco Cacao', 'Combinación intensa de cacao.', 48.00, 2, 'choco_cacao.jpg', TRUE),
+('Cocoa Latte', 'Café y chocolate cremoso.', 52.00, 1, 'cocoa_latte.jpg', TRUE),
+('Cocoa Frappuccino', 'Chocolate frío con hielo.', 58.00, 2, 'cocoa_frapp.jpg', FALSE),
+('Espresso Simple', 'Café puro y concentrado.', 25.00, 1, 'espresso.jpg', FALSE),
+('Té Verde', 'Infusión natural.', 30.00, 1, 'te_verde.jpg', FALSE),
+('Sandwich de Pollo', 'Pan integral con pollo.', 65.00, 4, 'sandwich_pollo.jpg', TRUE),
+('Galleta de Chocolate', 'Galleta artesanal con chispas.', 15.00, 3, 'galleta_choco.jpg', TRUE);
+
+-- -----------------------------------------------------
+-- RELACIÓN PRODUCTO - ALÉRGENOS
+-- -----------------------------------------------------
+-- Productos con leche
+INSERT INTO producto_alergeno VALUES (1,1),(2,1),(5,1),(6,1);
+
+-- Con gluten
+INSERT INTO producto_alergeno VALUES (9,2),(10,2);
+
+-- Con frutos secos
+INSERT INTO producto_alergeno VALUES (2,3);
+
+-- Con chocolate
+INSERT INTO producto_alergeno VALUES (2,4),(4,4),(5,4),(6,4),(10,4);
+
+-- -----------------------------------------------------
+-- PRODUCTO - TAMAÑOS (solo bebidas)
+-- -----------------------------------------------------
+INSERT INTO producto_tamano
+SELECT id_producto, id_tamano
+FROM productos, tamanos
+WHERE id_categoria IN (1,2);
+
+-- -----------------------------------------------------
+-- PRODUCTO - EXTRAS (solo bebidas)
+-- -----------------------------------------------------
+INSERT INTO producto_extra
+SELECT id_producto, id_extra
+FROM productos, extras
+WHERE id_categoria IN (1,2);
+
+-- -----------------------------------------------------
+-- CLIMAS
+-- -----------------------------------------------------
 INSERT INTO climas (nombre_clima, descripcion) VALUES
-('Caluroso', 'Días de calor, ideales para bebidas frías'),
-('Frío', 'Días fríos, perfectos para bebidas calientes'),
-('Lluvioso', 'Días de lluvia, café caliente reconforta'),
-('Templado', 'Clima agradable, cualquier bebida va bien');
+('Caluroso', 'Ideal para bebidas frías'),
+('Frío', 'Perfecto para bebidas calientes'),
+('Lluvioso', 'Antojo de algo caliente'),
+('Templado', 'Cualquier opción es buena');
 
--- Asociar productos existentes con climas (ejemplo)
--- Bebidas calientes (id_categoria 1) van con Frío y Lluvioso
-INSERT INTO producto_clima (id_producto, id_clima)
-SELECT id_producto, (SELECT id_clima FROM climas WHERE nombre_clima = 'Frío')
-FROM productos WHERE id_categoria = 1;
-INSERT INTO producto_clima (id_producto, id_clima)
-SELECT id_producto, (SELECT id_clima FROM climas WHERE nombre_clima = 'Lluvioso')
-FROM productos WHERE id_categoria = 1;
+-- Bebidas calientes → Frío y Lluvioso
+INSERT INTO producto_clima
+SELECT id_producto, 2 FROM productos WHERE id_categoria = 1;
 
--- Bebidas frías (id_categoria 2) van con Caluroso
-INSERT INTO producto_clima (id_producto, id_clima)
-SELECT id_producto, (SELECT id_clima FROM climas WHERE nombre_clima = 'Caluroso')
-FROM productos WHERE id_categoria = 2;
+INSERT INTO producto_clima
+SELECT id_producto, 3 FROM productos WHERE id_categoria = 1;
 
--- El resto va con Templado
-INSERT INTO producto_clima (id_producto, id_clima)
-SELECT id_producto, (SELECT id_clima FROM climas WHERE nombre_clima = 'Templado')
-FROM productos WHERE id_categoria NOT IN (1,2);
+-- Bebidas frías → Caluroso
+INSERT INTO producto_clima
+SELECT id_producto, 1 FROM productos WHERE id_categoria = 2;
+
+-- Otros → Templado
+INSERT INTO producto_clima
+SELECT id_producto, 4 FROM productos WHERE id_categoria NOT IN (1,2);
+
+-- -----------------------------------------------------
+-- USUARIO DE PRUEBA
+-- contraseña: admin123 (hash simulado)
+-- -----------------------------------------------------
+INSERT INTO usuarios (cuenta, nombre, apellido_paterno, correo, contrasena, telefono)
+VALUES ('admin', 'Administrador', 'Sistema', 'admin@cafe.com',
+'$2y$10$abcdefghijklmnopqrstuv', '5551234567');
+
+INSERT INTO usuario_configuracion (id_usuario, tema)
+VALUES (1, 'oscuro');
+
+-- -----------------------------------------------------
+-- PEDIDO DE EJEMPLO
+-- -----------------------------------------------------
+INSERT INTO pedidos (id_usuario, total, estado, metodo_pago)
+VALUES (1, 60.00, 'entregado', 'Tarjeta');
+
+INSERT INTO detalle_pedido (id_pedido, id_producto, id_tamano, cantidad, precio_unitario, subtotal)
+VALUES (1, 1, 3, 1, 55.00, 55.00);
+
+INSERT INTO detalle_extra VALUES (1, 2);
+
+-- -----------------------------------------------------
+-- PREFERENCIAS (simulación de hábito)
+-- -----------------------------------------------------
+INSERT INTO usuario_preferencias (id_usuario, id_producto, total_consumido, ultima_vez)
+VALUES (1,1,5,NOW()),
+       (1,3,3,NOW());
+
+ALTER TABLE usuario_configuracion
+ADD COLUMN idioma VARCHAR(10) DEFAULT 'es';
+
+CREATE TABLE producto_traduccion (
+    id_producto INT NOT NULL,
+    idioma VARCHAR(10) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT,
+    PRIMARY KEY (id_producto, idioma),
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE
+);
+
+-- ============================================
+-- MESAS
+-- ============================================
+CREATE TABLE mesas (
+    id_mesa INT AUTO_INCREMENT PRIMARY KEY,
+    numero_mesa INT NOT NULL UNIQUE,
+    capacidad INT NOT NULL DEFAULT 6,
+    disponible BOOLEAN DEFAULT TRUE
+) ENGINE=InnoDB;
+
+-- Insertar 10 mesas
+INSERT INTO mesas (numero_mesa, capacidad)
+VALUES (1,6),(2,6),(3,6),(4,6),(5,6),
+       (6,6),(7,6),(8,6),(9,6),(10,6);
+
+-- ============================================
+-- RESERVAS
+-- ============================================
+CREATE TABLE reservas (
+    id_reserva INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    correo VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20),
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+    personas INT NOT NULL,
+    estado ENUM('pendiente','confirmada','cancelada') DEFAULT 'pendiente',
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+) ENGINE=InnoDB;
+
+-- ============================================
+-- RELACIÓN RESERVA - MESA
+-- ============================================
+CREATE TABLE reserva_mesa (
+    id_reserva INT NOT NULL,
+    id_mesa INT NOT NULL,
+    PRIMARY KEY (id_reserva, id_mesa),
+    FOREIGN KEY (id_reserva) REFERENCES reservas(id_reserva) ON DELETE CASCADE,
+    FOREIGN KEY (id_mesa) REFERENCES mesas(id_mesa)
+) ENGINE=InnoDB;

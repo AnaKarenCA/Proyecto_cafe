@@ -20,14 +20,18 @@ class CategoriaController {
 
     // Muestra los productos de una categoría específica
     public function show($id) {
-        $categoria = $this->categoriaModel->getById($id);
-        if (!$categoria) {
-            header('HTTP/1.0 404 Not Found');
-            echo "Categoría no encontrada";
-            exit;
-        }
-        $productos = $this->productoModel->getByCategoria($id);
-        $titulo = $categoria['nombre_categoria'];
-        require_once __DIR__ . '/../views/productos.php';
-    }
+
+    require_once APP_PATH . '/models/Producto.php';
+    require_once APP_PATH . '/models/Categoria.php';
+
+    $productoModel = new Producto();
+    $categoriaModel = new Categoria();
+
+    $idioma = $_SESSION['lang'] ?? 'es';
+
+    $categoria = $categoriaModel->getById($id);
+    $productos = $productoModel->getByCategoria($id, $idioma);
+
+    require APP_PATH . '/views/categoria.php';
+}
 }

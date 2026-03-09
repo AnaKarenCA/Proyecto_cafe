@@ -12,7 +12,7 @@ include __DIR__ . '/layout/header.php';
         <div class="product-detail-info">
             <h1><?= htmlspecialchars($producto['nombre']) ?></h1>
             <p class="product-description"><?= htmlspecialchars($producto['descripcion'] ?? 'Sin descripción') ?></p>
-            <p class="product-price">$<?= number_format($producto['precio'], 2) ?> MXN</p>
+            <p class="product-price">$<?= number_format($producto['precio'] ?? 0, 2) ?> MXN</p>
             <form action="index.php?controller=carrito&action=agregar" method="POST" class="add-to-cart-form">
                 <input type="hidden" name="id" value="<?= $producto['id_producto'] ?>">
                 <label for="cantidad">Cantidad:</label>

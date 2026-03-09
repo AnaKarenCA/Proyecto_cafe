@@ -2,73 +2,94 @@
 require_once __DIR__ . '/../models/Reserva.php';
 
 class ReservaController {
+
     private $reservaModel;
 
     public function __construct() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $this->reservaModel = new Reserva();
     }
 
-    // Muestra el formulario de reserva (público)
     public function index() {
-        $titulo = "Reservar mesa";
+
+        $fecha = $_GET['fecha'] ?? date('Y-m-d');
+
+        $disponibilidad = $this->reservaModel->disponibilidadPorFecha($fecha);
+
+        $horasOcupadas = [];
+
+        foreach ($disponibilidad as $d) {
+
+    // Convertir 10:00:00 → 10:00
+    $horaFormateada = date('H:i', strtotime($d['hora']));
+
+    $horasOcupadas[$horaFormateada] = $d['total'];
+}
+
         require_once __DIR__ . '/../views/reserva.php';
+        require_once __DIR__ . '/../views/layout/footer.php';
     }
 
-    // Procesa la reserva (público, pero puede asociarse a usuario si está logueado)
     public function store() {
+
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: index.php?controller=reserva&action=index');
             exit;
         }
 
         $datos = [
-            'nombre_cliente' => $_POST['nombre'] ?? '',
-            'email_cliente' => $_POST['email'] ?? '',
-            'telefono_cliente' => $_POST['telefono'] ?? '',
-            'fecha_reserva' => $_POST['fecha'] ?? '',
-            'hora_reserva' => $_POST['hora'] ?? '',
-            'num_personas' => $_POST['personas'] ?? 1,
-            'comentarios' => $_POST['comentarios'] ?? ''
+            'id_usuario' => $_SESSION['usuario_id'] ?? null,
+            'nombre' => trim($_POST['nombre'] ?? ''),
+            'correo' => trim($_POST['email'] ?? ''),
+            'telefono' => trim($_POST['telefono'] ?? ''),
+            'fecha' => $_POST['fecha'] ?? '',
+            'hora' => $_POST['hora'] ?? '',
+            'personas' => (int)($_POST['personas'] ?? 1)
         ];
 
-        // Validaciones
         $errores = [];
-        if (empty($datos['nombre_cliente'])) $errores[] = "El nombre es obligatorio.";
-        if (!filter_var($datos['email_cliente'], FILTER_VALIDATE_EMAIL)) $errores[] = "Correo inválido.";
-        if (empty($datos['fecha_reserva']) || empty($datos['hora_reserva'])) $errores[] = "Fecha y hora son obligatorias.";
-        if ($datos['num_personas'] < 1) $errores[] = "Número de personas inválido.";
+
+        if (empty($datos['nombre'])) {
+            $errores[] = "El nombre es obligatorio.";
+        }
+
+        if (!filter_var($datos['correo'], FILTER_VALIDATE_EMAIL)) {
+            $errores[] = "Correo electrónico inválido.";
+        }
+
+        if ($datos['personas'] < 1 || $datos['personas'] > 6) {
+            $errores[] = "Cada mesa admite máximo 6 personas.";
+        }
+
+        if (empty($datos['fecha']) || empty($datos['hora'])) {
+            $errores[] = "Debe seleccionar fecha y hora.";
+        }
 
         if (!empty($errores)) {
-            $_SESSION['errores'] = $errores;
-            $_SESSION['old'] = $datos;
+            $_SESSION['reserva_error'] = implode("<br>", $errores);
             header('Location: index.php?controller=reserva&action=index');
             exit;
         }
 
-        // Si el usuario está logueado, asociar reserva a su cuenta
-        if (isset($_SESSION['usuario_id'])) {
-            $datos['id_usuario'] = $_SESSION['usuario_id'];
+        $reserva = $this->reservaModel->crear($datos);
+
+        if ($reserva) {
+
+            $_SESSION['reserva_success'] = [
+                'nombre' => $datos['nombre'],
+                'fecha' => $datos['fecha'],
+                'hora' => $datos['hora'],
+                'personas' => $datos['personas']
+            ];
+
         } else {
-            $datos['id_usuario'] = null;
+            $_SESSION['reserva_error'] = "No hay mesas disponibles para esa fecha y hora.";
         }
 
-        if ($this->reservaModel->crear($datos)) {
-            $_SESSION['success'] = "Reserva solicitada con éxito. Te contactaremos pronto.";
-        } else {
-            $_SESSION['error'] = "Error al procesar la reserva. Intenta nuevamente.";
-        }
         header('Location: index.php?controller=reserva&action=index');
-    }
-
-    // Lista las reservas del usuario autenticado (requiere login)
-    public function misReservas() {
-        if (!isset($_SESSION['usuario_id'])) {
-            header('Location: index.php?controller=auth&action=showLoginForm');
-            exit;
-        }
-
-        $reservas = $this->reservaModel->getByUsuario($_SESSION['usuario_id']);
-        $titulo = "Mis reservas";
-        require_once __DIR__ . '/../views/mis_reservas.php'; // Vista no listada, se puede crear
+        exit;
     }
 }

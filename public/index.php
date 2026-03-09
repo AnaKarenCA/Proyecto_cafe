@@ -34,7 +34,11 @@ if (isset($_GET['controller']) && isset($_GET['action'])) {
     }
     exit;
 }
-
+if (isset($_GET['categoria'])) {
+    $controller = new CategoriaController();
+    $controller->show($_GET['categoria']);
+    exit;
+}
 // --- MODO 2: Rutas amigables (path) ---
 $base = '/Proyecto_cafe/public';
 $request = $_SERVER['REQUEST_URI'];

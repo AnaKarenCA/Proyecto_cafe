@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/Producto.php';
-require_once __DIR__ . '/../models/Pedido.php';  // Se asume que existe
+require_once __DIR__ . '/../models/Pedido.php';
 require_once __DIR__ . '/../models/DetallePedido.php';
 
 class CarritoController {
@@ -10,7 +10,8 @@ class CarritoController {
 
     public function __construct() {
         $this->productoModel = new Producto();
-        // Estos modelos deberían crearse; por simplicidad se usan métodos estáticos o se asumen existentes
+        $this->pedidoModel = new Pedido();
+        $this->detalleModel = new DetallePedido();
     }
 
     // Inicializa el carrito en sesión si no existe
@@ -20,20 +21,17 @@ class CarritoController {
         }
     }
 
-    // Muestra el contenido del carrito (vista parcial o completa)
+    // Muestra la página completa del carrito
     public function ver() {
         $this->initCarrito();
-        $items = $_SESSION['carrito'];
-        $total = $this->calcularTotal($items);
-        // Puede ser una vista parcial incluida en otras páginas o una página completa
-        require_once __DIR__ . '/../views/carrito.php';
+        require_once __DIR__ . '/../views/carrito_completo.php';
     }
 
     // Agrega un producto al carrito
     public function agregar() {
         $this->initCarrito();
         $id = $_POST['id'] ?? $_GET['id'] ?? null;
-        $cantidad = $_POST['cantidad'] ?? 1;
+        $cantidad = (int)($_POST['cantidad'] ?? 1);
 
         if (!$id) {
             $_SESSION['error'] = "Producto no especificado.";
@@ -48,7 +46,6 @@ class CarritoController {
             exit;
         }
 
-        // Si ya existe, aumentar cantidad
         $encontrado = false;
         foreach ($_SESSION['carrito'] as &$item) {
             if ($item['id'] == $id) {
@@ -68,14 +65,14 @@ class CarritoController {
         }
 
         $_SESSION['success'] = "Producto agregado al carrito.";
-        header('Location: index.php?controller=carrito&action=ver');
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php?controller=producto&action=index'));
     }
 
     // Actualiza la cantidad de un producto en el carrito
     public function actualizar() {
         $this->initCarrito();
         $id = $_POST['id'] ?? null;
-        $cantidad = $_POST['cantidad'] ?? 1;
+        $cantidad = (int)($_POST['cantidad'] ?? 1);
 
         if ($id && $cantidad > 0) {
             foreach ($_SESSION['carrito'] as &$item) {
@@ -97,7 +94,7 @@ class CarritoController {
                 return $item['id'] != $id;
             });
         }
-        header('Location: index.php?controller=carrito&action=ver');
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php?controller=carrito&action=ver'));
     }
 
     // Muestra el formulario de checkout (requiere login)
@@ -109,18 +106,16 @@ class CarritoController {
             exit;
         }
 
-        // Verificar autenticación
         if (!isset($_SESSION['usuario_id'])) {
             $_SESSION['redirect_after_login'] = 'index.php?controller=carrito&action=checkout';
             header('Location: index.php?controller=auth&action=showLoginForm');
             exit;
         }
 
-        // Mostrar formulario de confirmación de pedido
         $items = $_SESSION['carrito'];
         $total = $this->calcularTotal($items);
         $titulo = "Confirmar pedido";
-        require_once __DIR__ . '/../views/checkout.php'; // Vista no listada, se asume creada
+        require_once __DIR__ . '/../views/checkout.php';
     }
 
     // Procesa el pedido (guarda en BD)
@@ -145,22 +140,37 @@ class CarritoController {
         $id_usuario = $_SESSION['usuario_id'];
         $comentarios = $_POST['comentarios'] ?? '';
         $metodo_pago = $_POST['metodo_pago'] ?? 'efectivo';
-
-        // Calcular total
         $total = $this->calcularTotal($_SESSION['carrito']);
 
-        // Aquí se llamaría al modelo Pedido para guardar
-        // Por simplicidad, se muestra un mensaje de éxito y se vacía el carrito
-        // En un caso real: $pedido_id = $this->pedidoModel->crear($id_usuario, $total, $comentarios, $metodo_pago);
-        // luego guardar cada detalle con $this->detalleModel->insertar(...)
+        $db = Database::connect();
+        $db->beginTransaction();
 
-        $_SESSION['success'] = "¡Pedido realizado con éxito! (simulación)";
-        unset($_SESSION['carrito']);
-        header('Location: index.php?controller=welcome&action=index');
-        exit;
+        try {
+            $id_pedido = $this->pedidoModel->crear($id_usuario, $total, $comentarios, $metodo_pago);
+            if (!$id_pedido) {
+                throw new Exception("Error al crear el pedido.");
+            }
+
+            foreach ($_SESSION['carrito'] as $item) {
+                $ok = $this->detalleModel->insertar($id_pedido, $item['id'], $item['cantidad'], $item['precio']);
+                if (!$ok) {
+                    throw new Exception("Error al guardar detalle del pedido.");
+                }
+            }
+
+            $db->commit();
+            $_SESSION['success'] = "¡Pedido realizado con éxito!";
+            unset($_SESSION['carrito']);
+            header('Location: index.php?controller=welcome&action=index');
+            exit;
+        } catch (Exception $e) {
+            $db->rollBack();
+            $_SESSION['error'] = "Error al procesar el pedido: " . $e->getMessage();
+            header('Location: index.php?controller=carrito&action=checkout');
+            exit;
+        }
     }
 
-    // Calcula el total del carrito
     private function calcularTotal($items) {
         $total = 0;
         foreach ($items as $item) {
@@ -168,4 +178,34 @@ class CarritoController {
         }
         return $total;
     }
+    public function actualizarAjax() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['cantidad'])) {
+        $id = (int)$_POST['id'];
+        $cantidad = (int)$_POST['cantidad'];
+        if ($cantidad >= 1 && $cantidad <= 10) {
+           Carrito::actualizarCantidad($id, $cantidad);
+        }
+    }
+    $this->responderJson();
+}
+
+public function quitarAjax() {
+    if (isset($_GET['id'])) {
+        $id = (int)$_GET['id'];
+        Carrito::quitar($id);
+    }
+    $this->responderJson();
+}
+
+public function render() {
+    // Devuelve solo el HTML del carrito (sin layout)
+    include 'views/carrito.php';
+    exit;
+}
+
+private function responderJson() {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => true]);
+    exit;
+}
 }

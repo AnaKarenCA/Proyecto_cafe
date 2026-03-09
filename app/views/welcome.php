@@ -34,11 +34,7 @@
     </div>
 </section>
 
-<!-- Hero -->
-<section class="hero">
-    <h2>Disfruta del mejor café</h2>
-    <p>Explora nuestro menú y haz tu pedido de manera fácil y accesible.</p>
-</section>
+
 
 <!-- Productos destacados / más vendidos -->
 <section class="featured-products">
@@ -49,7 +45,7 @@
                 <div class="product-card">
                     <img src="img/<?= htmlspecialchars($producto['imagen'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>">
                     <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
-                    <p class="price">$<?= number_format($producto['precio'], 2) ?> MXN</p>
+                    <p class="price">$<?= number_format($producto['precio'] ?? 0, 2) ?> MXN</p>
                     <div class="product-actions">
                         <a href="index.php?controller=producto&action=show&id=<?= $producto['id_producto'] ?>" class="btn btn-secondary">Ver detalles</a>
                         <form action="index.php?controller=carrito&action=agregar" method="POST" class="add-to-cart-form">
@@ -93,25 +89,35 @@
 </section>
 
 <!-- Nuestras categorías con iconos -->
-<section class="categories-summary">
-    <h2>Nuestras categorías</h2>
-    <?php if (isset($categorias) && count($categorias) > 0): ?>
-        <div class="category-grid">
-            <?php foreach ($categorias as $categoria): ?>
-                <a href="index.php?controller=categoria&action=show&id=<?= $categoria['id_categoria'] ?>" class="category-card-link">
-                    <div class="category-card">
-                        <?php if (!empty($categoria['icono'])): ?>
-                            <span class="category-icon"><?= htmlspecialchars($categoria['icono']) ?></span>
-                        <?php else: ?>
-                            <span class="category-icon"></span> <!-- Icono por defecto -->
-                        <?php endif; ?>
-                        <h3><?= htmlspecialchars($categoria['nombre_categoria']) ?></h3>
-                        <p><?= htmlspecialchars($categoria['descripcion'] ?? '') ?></p>
-                    </div>
-                </a>
-            <?php endforeach; ?>
+<section class="info-cafe">
+    <h2>Información del Café</h2>
+
+    <div class="info-grid">
+
+        <div class="info-card">
+            <span class="material-symbols-outlined">schedule</span>
+            <h3>Horario</h3>
+            <p>Lunes a Domingo</p>
+            <p><strong>9:00 AM – 5:00 PM</strong></p>
         </div>
-    <?php endif; ?>
+
+        <div class="info-card">
+            <span class="material-symbols-outlined">table_restaurant</span>
+            <h3>Mesas disponibles</h3>
+            <p>10 mesas</p>
+            <p>6 sillas por mesa</p>
+        </div>
+
+        <div class="info-card">
+            <span class="material-symbols-outlined">event_available</span>
+            <h3>Reservaciones</h3>
+            <p>Reserva tu mesa fácilmente</p>
+            <a href="index.php?controller=reserva&action=index" class="btn btn-primary">
+                Reservar mesa
+            </a>
+        </div>
+
+    </div>
 </section>
 
 <!-- Incluir carrito como panel lateral -->

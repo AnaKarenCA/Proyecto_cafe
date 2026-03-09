@@ -11,23 +11,21 @@ class WelcomeController {
         $this->categoriaModel = new Categoria();
     }
 
+    private function getIdioma() {
+        return $_SESSION['idioma'] ?? 'es';
+    }
+
     public function index() {
-        // Productos destacados (manual) - Podemos cambiar a mas vendidos si hay datos
-        $productos_destacados = $this->productoModel->getDestacados(6);
-        
-        // Los más vendidos:
-        // $productos_destacados = $this->productoModel->getMasVendidos(6);
-        
+
+        $idioma = $this->getIdioma();
+
+        $productos_destacados = $this->productoModel->getDestacados(6, $idioma);
         $categorias = $this->categoriaModel->getAll();
-        
-        // Recomendaciones por clima (ejemplo: usamos 'Caluroso' como predeterminado)
-        // A futuro, btener el clima de una API o por estación
-        $recomendaciones_clima = $this->productoModel->getPorClima('Caluroso');
-        
-        // Para el carrusel, podemos usar los mismos productos destacados o crear un array fijo
-        $carrusel_items = $this->productoModel->getDestacados(6); // 3 imágenes para el carrusel
-        
+        $recomendaciones_clima = $this->productoModel->getPorClima('Caluroso', $idioma);
+        $carrusel_items = $this->productoModel->getDestacados(6, $idioma);
+
         $titulo = "Bienvenido a Omnis Café";
+
         require_once __DIR__ . '/../views/welcome.php';
     }
 }
