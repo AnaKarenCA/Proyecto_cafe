@@ -7,7 +7,7 @@
         <div class="slides">
             <?php if (isset($carrusel_items) && count($carrusel_items) > 0): ?>
                 <?php foreach ($carrusel_items as $item): ?>
-                    <div class="slide-item" style="background-image: url('img/<?= htmlspecialchars($item['imagen'] ?? 'default.jpg') ?>');">
+                    <div class="slide-item" style="background-image: url('/img/productos/<?= htmlspecialchars($item['imagen'] ?? 'default.jpg') ?>');">
                         <div class="content">
                             <div class="name"><?= htmlspecialchars($item['nombre']) ?></div>
                             <div class="des"><?= htmlspecialchars($item['descripcion'] ?? '') ?></div>
@@ -18,7 +18,7 @@
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <div class="slide-item" style="background-image: url('img/default.jpg');">
+                <div class="slide-item" style="background-image: url('/img/productos/default.jpg');">
                     <div class="content">
                         <div class="name">Omnis Café</div>
                         <div class="des">Disfruta de nuestras especialidades</div>
@@ -34,8 +34,6 @@
     </div>
 </section>
 
-
-
 <!-- Productos destacados / más vendidos -->
 <section class="featured-products">
     <h2>Productos destacados</h2>
@@ -43,7 +41,8 @@
         <div class="product-grid">
             <?php foreach ($productos_destacados as $producto): ?>
                 <div class="product-card">
-                    <img src="img/<?= htmlspecialchars($producto['imagen'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>">
+                    <img src="/img/productos/<?= htmlspecialchars($producto['imagen'] ?? 'default.jpg') ?>" 
+                         alt="<?= htmlspecialchars($producto['nombre']) ?>">
                     <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
                     <p class="price">$<?= number_format($producto['precio'] ?? 0, 2) ?> MXN</p>
                     <div class="product-actions">
@@ -69,7 +68,8 @@
         <div class="product-grid">
             <?php foreach ($recomendaciones_clima as $producto): ?>
                 <div class="product-card">
-                    <img src="img/<?= htmlspecialchars($producto['imagen'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>">
+                    <img src="/img/productos/<?= htmlspecialchars($producto['imagen'] ?? 'default.jpg') ?>" 
+                         alt="<?= htmlspecialchars($producto['nombre']) ?>">
                     <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
                     <p class="price">$<?= number_format($producto['precio'], 2) ?> MXN</p>
                     <div class="product-actions">
@@ -91,32 +91,25 @@
 <!-- Nuestras categorías con iconos -->
 <section class="info-cafe">
     <h2>Información del Café</h2>
-
     <div class="info-grid">
-
         <div class="info-card">
             <span class="material-symbols-outlined">schedule</span>
             <h3>Horario</h3>
             <p>Lunes a Domingo</p>
             <p><strong>9:00 AM – 5:00 PM</strong></p>
         </div>
-
         <div class="info-card">
             <span class="material-symbols-outlined">table_restaurant</span>
             <h3>Mesas disponibles</h3>
             <p>10 mesas</p>
             <p>6 sillas por mesa</p>
         </div>
-
         <div class="info-card">
             <span class="material-symbols-outlined">event_available</span>
             <h3>Reservaciones</h3>
             <p>Reserva tu mesa fácilmente</p>
-            <a href="index.php?controller=reserva&action=index" class="btn btn-primary">
-                Reservar mesa
-            </a>
+            <a href="index.php?controller=reserva&action=index" class="btn btn-primary">Reservar mesa</a>
         </div>
-
     </div>
 </section>
 

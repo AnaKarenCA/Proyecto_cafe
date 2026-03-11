@@ -377,3 +377,13 @@ CREATE TABLE reserva_mesa (
     FOREIGN KEY (id_reserva) REFERENCES reservas(id_reserva) ON DELETE CASCADE,
     FOREIGN KEY (id_mesa) REFERENCES mesas(id_mesa)
 ) ENGINE=InnoDB;
+
+
+--- Cambios
+ALTER TABLE usuarios 
+ADD COLUMN rol ENUM('cliente','admin') DEFAULT 'cliente';
+
+UPDATE usuarios 
+SET rol = 'admin' 
+WHERE cuenta = 'admin';
+

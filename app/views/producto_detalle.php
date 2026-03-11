@@ -7,7 +7,8 @@ include __DIR__ . '/layout/header.php';
 <div class="product-detail-container">
     <div class="product-detail-card">
         <div class="product-detail-image">
-            <img src="img/<?= htmlspecialchars($producto['imagen'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>">
+            <img src="/img/productos/<?= htmlspecialchars($producto['imagen'] ?? 'default.jpg') ?>" 
+                 alt="<?= htmlspecialchars($producto['nombre']) ?>">
         </div>
         <div class="product-detail-info">
             <h1><?= htmlspecialchars($producto['nombre']) ?></h1>

@@ -158,4 +158,56 @@ public function getByCategoria($idCategoria, $idioma = 'es') {
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+/* =====================================
+   CREAR PRODUCTO
+===================================== */
+public function crear($nombre, $descripcion, $precio, $categoria, $imagen)
+    {
+        $sql = "INSERT INTO productos
+                (nombre, descripcion, precio_base, id_categoria, imagen)
+                VALUES (:nombre, :descripcion, :precio, :categoria, :imagen)";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            'nombre' => $nombre,
+            'descripcion' => $descripcion,
+            'precio' => $precio,
+            'categoria' => $categoria,
+            'imagen' => $imagen
+        ]);
+    }
+
+
+/* =====================================
+   ACTUALIZAR PRODUCTO
+===================================== */
+ public function actualizar($id, $nombre, $descripcion, $precio, $categoria, $imagen)
+    {
+        $sql = "UPDATE productos
+                SET nombre = :nombre,
+                    descripcion = :descripcion,
+                    precio_base = :precio,
+                    id_categoria = :categoria,
+                    imagen = :imagen
+                WHERE id_producto = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            'id' => $id,
+            'nombre' => $nombre,
+            'descripcion' => $descripcion,
+            'precio' => $precio,
+            'categoria' => $categoria,
+            'imagen' => $imagen
+        ]);
+    }
+
+
+/* =====================================
+   ELIMINAR PRODUCTO
+===================================== */
+public function eliminar($id)
+    {
+        $sql = "DELETE FROM productos WHERE id_producto = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id' => $id]);
+    }
 }

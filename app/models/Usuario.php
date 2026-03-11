@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../config/database.php';
 class Usuario {
 
     private $pdo;
+    
 
     public function __construct() {
         $this->pdo = Database::connect();
@@ -119,5 +120,16 @@ class Usuario {
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute(['id' => $id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+public function esAdmin($id_usuario){
+
+    $sql = "SELECT rol FROM usuarios WHERE id_usuario = :id";
+
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute(['id'=>$id_usuario]);
+
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $user && $user['rol'] === 'admin';
 }
 }

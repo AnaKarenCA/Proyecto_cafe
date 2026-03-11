@@ -25,37 +25,40 @@ class AuthController {
     /* ================================
        Procesar login
     ================================= */
-    public function login() {
+public function login() {
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: index.php?controller=auth&action=showLoginForm');
-            exit;
-        }
-
-        $cuenta = trim($_POST['cuenta'] ?? '');
-        $contrasena = $_POST['contrasena'] ?? '';
-
-        $usuario = $this->usuarioModel->getByCuenta($cuenta);
-        
-        if ($usuario && password_verify($contrasena, $usuario['contrasena'])) {
-
-            session_regenerate_id(true);
-
-            $_SESSION['usuario_id'] = $usuario['id_usuario'];
-            $_SESSION['usuario_nombre'] = $usuario['nombre'];
-
-            $_SESSION['idioma'] = $this->usuarioModel->getIdioma($usuario['id_usuario']);
-
-            header('Location: index.php?controller=welcome&action=index');
-            exit;
-
-        } else {
-
-            $_SESSION['error'] = "Credenciales incorrectas.";
-            header('Location: index.php?controller=auth&action=showLoginForm');
-            exit;
-        }
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: index.php?controller=auth&action=showLoginForm');
+        exit;
     }
+
+    $cuenta = trim($_POST['cuenta'] ?? '');
+    $contrasena = $_POST['contrasena'] ?? '';
+
+    $usuario = $this->usuarioModel->getByCuenta($cuenta);
+
+    if ($usuario && password_verify($contrasena, $usuario['contrasena'])) {
+
+        session_regenerate_id(true);
+
+        $_SESSION['usuario_id'] = $usuario['id_usuario'];
+        $_SESSION['usuario_nombre'] = $usuario['nombre'];
+
+        /* ESTA LÍNEA ES LA IMPORTANTE */
+        $_SESSION['rol'] = $usuario['rol'];
+
+        $_SESSION['idioma'] = $this->usuarioModel->getIdioma($usuario['id_usuario']);
+
+        header('Location: index.php?controller=welcome&action=index');
+        exit;
+
+    } else {
+
+        $_SESSION['error'] = "Credenciales incorrectas.";
+        header('Location: index.php?controller=auth&action=showLoginForm');
+        exit;
+    }
+}
 
     /* ================================
        Mostrar registro

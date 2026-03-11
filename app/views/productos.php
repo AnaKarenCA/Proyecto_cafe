@@ -27,14 +27,13 @@ include __DIR__ . '/layout/header.php';
     <?php endif; ?>
 </section>
 
-
 <section class="products-list">
     <?php if (isset($productos) && count($productos) > 0): ?>
         <div class="product-grid">
 
             <?php foreach ($productos as $producto): ?>
                 <div class="product-card">
-                    <img src="img/<?= htmlspecialchars($producto['imagen'] ?? 'default.jpg') ?>" 
+                    <img src="/img/productos/<?= htmlspecialchars($producto['imagen'] ?? 'default.jpg') ?>" 
                          alt="<?= htmlspecialchars($producto['nombre']) ?>">
 
                     <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
