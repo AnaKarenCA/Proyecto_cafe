@@ -1,0 +1,90 @@
+/* ========== DROPDOWN (menús desplegables) ========== */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--primary-dark);
+    border: 2px solid var(--primary-deep);
+    border-radius: var(--border-radius);
+    padding: 10px 0;
+    min-width: 200px;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 4px 8px var(--shadow);
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li {
+    list-style: none;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    color: var(--text-dark);
+    text-decoration: none;
+    min-height: var(--touch-size);
+    line-height: 1.2;
+    font-size: 1rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.dropdown-menu a:hover {
+    background-color: var(--primary-dark);
+    color: var(--text-light);
+}
+
+body.dark-mode .dropdown-menu {
+    background-color: #1e2f3a;
+    border-color: var(--accent-warm);
+}
+
+body.dark-mode .dropdown-menu a {
+    color: var(--text-dark);
+}
+
+body.dark-mode .dropdown-menu a:hover {
+    background-color: var(--accent-strong);
+    color: var(--bg-light);
+}
+
+/* ========== MENÚ DE USUARIO ========== */
+.user-dropdown .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-name {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-dropdown .dropdown-menu {
+    left: auto;
+    right: 0;
+    min-width: 150px;
+    background-color: var(--text-light);
+}
+
+body.dark-mode .user-name {
+    color: var(--text-dark);
+}

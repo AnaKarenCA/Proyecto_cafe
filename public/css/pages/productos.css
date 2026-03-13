@@ -1,0 +1,21 @@
+/* ========== PÁGINA DE PRODUCTOS ========== */
+.product-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.product-actions .btn {
+    flex: 1;
+    padding: 8px 5px;
+    font-size: 0.9rem;
+}
+
+.add-to-cart-form {
+    flex: 1;
+}
+
+.add-to-cart-form button {
+    width: 100%;
+}

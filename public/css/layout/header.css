@@ -1,0 +1,325 @@
+/* ========== HEADER Y NAVEGACIÓN ========== */
+.main-header {
+    background-color: var(--primary-deep);
+    color: var(--text-light);
+    padding: 10px 0;
+    box-shadow: 0 2px 5px var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: background-color 0.3s;
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.main-nav .nav-list {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.main-nav .nav-list a {
+    color: var(--text-light);
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: var(--border-radius);
+    transition: background-color 0.3s;
+    display: inline-block;
+    min-height: var(--touch-size);
+    min-width: var(--touch-size);
+    line-height: calc(var(--touch-size) - 16px);
+    font-size: 1.1rem;
+}
+
+.main-nav .nav-list a:hover,
+.main-nav .nav-list a:focus {
+    background-color: var(--accent-strong);
+    outline: none;
+}
+
+/* ========== HEADER ICONOS Y DROPDOWN ========== */
+.header-icons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.icon-btn, .icon-link {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    color: var(--text-light);
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--touch-size);
+    min-height: var(--touch-size);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.icon-btn:hover, .icon-link:hover {
+    color: var(--accent-strong);
+}
+
+body.dark-mode .icon-btn:hover,
+body.dark-mode .icon-link:hover {
+    color: var(--accent-warm);
+}
+
+.cart-icon {
+    position: relative;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--accent-strong);
+    color: var(--text-light);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+/* Logo */
+.logo-img {
+    height: 80px;
+    width: auto;
+}
+
+/* Iconos de usuario, accesibilidad, etc. */
+.icon-img {
+    width: 28px;
+    height: 28px;
+}
+
+/* Banderas */
+.flag-icon {
+    width: 28px;
+    height: 20px;
+    object-fit: cover;
+}
+
+/* Botón de accesibilidad con imagen */
+.accessibility-btn .icon-img {
+    width: 28px;
+    height: 28px;
+}
+.logo-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text-light);
+}
+/* ===== SELECTOR DE IDIOMAS MEJORADO ===== */
+.language-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.language-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: var(--border-radius);
+    background-color: rgba(255,255,255,0.1);
+    min-height: 44px;
+    min-width: 44px;
+    color: var(--text-light);
+}
+
+.language-btn:hover,
+.language-btn:focus {
+    background-color: var(--accent-strong);
+    outline: 2px solid var(--text-dark);
+}
+
+.language-btn .flag-icon {
+    width: 28px;
+    height: 20px;
+    object-fit: cover;
+    border-radius: 3px;
+}
+
+.language-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--white);
+    border: 2px solid var(--primary-deep);
+    border-radius: var(--border-radius);
+    padding: 8px 0;
+    min-width: 160px;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 4px 8px var(--shadow);
+    list-style: none;
+}
+
+.language-dropdown:hover .language-menu,
+.language-dropdown:focus-within .language-menu {
+    display: block;
+}
+
+.language-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    color: var(--text-dark);
+    text-decoration: none;
+    min-height: 44px;
+    transition: background-color 0.2s;
+}
+
+.language-option:hover {
+    background-color: var(--accent-warm);
+    color: var(--text-light);
+}
+
+.language-option.active {
+    background-color: var(--primary-deep);
+    color: var(--text-light);
+    font-weight: bold;
+}
+
+.language-option .flag-icon {
+    width: 24px;
+    height: 18px;
+    object-fit: cover;
+}
+/* ========== MEJORAS DE ACCESIBILIDAD Y TAMAÑO ========== */
+
+/* Aumentar tamaño de fuente del menú principal */
+.main-nav .nav-list a {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+/* Iconos más grandes y con contraste */
+.icon-img {
+    width: 32px;
+    height: 32px;
+    filter: brightness(0) invert(1); /* Blanco sobre fondo oscuro */
+}
+
+/* Ajustes específicos para el icono del carrito */
+.cart-icon .icon-img {
+    filter: brightness(0) invert(1);
+}
+
+/* Botón de idiomas mejorado */
+.language-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 10px 16px;
+    min-height: 44px;
+    min-width: 44px;
+    color: var(--text-light);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.language-btn:hover,
+.language-btn:focus {
+    background-color: var(--accent-strong);
+    outline: 2px solid var(--text-dark);
+}
+
+.language-btn .flag-icon {
+    width: 32px;
+    height: 24px;
+    object-fit: cover;
+    border-radius: 3px;
+}
+
+/* Menú desplegable de idiomas */
+.language-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--white);
+    border: 2px solid var(--accent-strong);
+    border-radius: var(--border-radius);
+    padding: 8px 0;
+    min-width: 200px;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 4px 8px var(--shadow);
+    list-style: none;
+}
+
+.language-dropdown:hover .language-menu,
+.language-dropdown:focus-within .language-menu {
+    display: block;
+}
+
+.language-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: var(--text-dark);
+    text-decoration: none;
+    font-size: 1.1rem;
+    min-height: 44px;
+    transition: background-color 0.2s;
+}
+
+.language-option:hover {
+    background-color: var(--accent-warm);
+    color: var(--text-light);
+}
+
+.language-option.active {
+    background-color: var(--primary-deep);
+    color: var(--text-light);
+    font-weight: bold;
+}
+
+.language-option .flag-icon {
+    width: 28px;
+    height: 20px;
+    object-fit: cover;
+}
+
+/* Ajustes para el dropdown de usuario */
+.dropdown-menu a {
+    font-size: 1.1rem;
+    padding: 12px 16px;
+}
+
+.user-name {
+    font-size: 1rem;
+    font-weight: 500;
+}

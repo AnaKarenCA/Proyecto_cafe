@@ -1,0 +1,41 @@
+/* ========== PANEL DE ADMINISTRACIÓN ========== */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 2px 5px var(--shadow);
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--accent-warm);
+}
+
+.admin-table th {
+    background-color: var(--primary-deep);
+    color: var(--text-light);
+    font-weight: bold;
+}
+
+.admin-table td {
+    color: var(--text-dark);
+}
+
+.admin-table tr:hover {
+    background-color: var(--bg-elevated);
+}
+
+.admin-actions a {
+    margin-right: 10px;
+    color: var(--accent-strong);
+    text-decoration: none;
+}
+
+.admin-actions a:hover {
+    text-decoration: underline;
+}

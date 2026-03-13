@@ -1,0 +1,36 @@
+<?php
+return [
+    'inicio'          => 'Home',
+    'categorias'      => 'Categories',
+    'productos'       => 'Products',
+    'reservar_mesa'   => 'Book a table',
+    'accesibilidad'   => 'Accessibility',
+    'cambiar_tema'    => 'Change theme',
+    'mi_perfil'       => 'My profile',
+    'mis_pedidos'     => 'My orders',
+    'mis_reservas'    => 'My reservations',
+    'cerrar_sesion'   => 'Logout',
+    'iniciar_sesion'  => 'Login',
+    'carrito'         => 'Cart',
+    
+    'aumentar_texto'  => 'Increase text',
+    'disminuir_texto' => 'Decrease text',
+    'leer_pantalla'   => 'Read screen',
+    
+    'ver_detalles'    => 'View details',
+    'agregar'         => 'Add',
+    'precio'          => 'Price',
+    'cantidad'        => 'Quantity',
+    'total'           => 'Total',
+    'acciones'        => 'Actions',
+    'editar'          => 'Edit',
+    'eliminar'        => 'Delete',
+    'confirmar'       => 'Are you sure?',
+    
+    'administrar_productos' => 'Administrar productos',
+'administrar_categorias' => 'Administrar categorías',
+'ver_pedidos' => 'Ver pedidos',
+'ver_reservas' => 'Ver reservas',
+'menu_usuario' => 'Menú de usuario',
+'usuario' => 'Usuario',
+];

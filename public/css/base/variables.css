@@ -1,0 +1,47 @@
+
+/* ========== VARIABLES ========== */
+:root {
+    /* Paleta modo claro (alto contraste) */
+    --primary-dark: #283618;      /* Verde oliva */
+    --primary-deep: #283618;      /* Azul profundo para fondos oscuros */
+    --bg-light: #fefae0;           /* Fondo claro crema */
+    --accent-warm: #875c35;        /* Marrón cálido para acentos */
+    --accent-strong: #553922;      /* Marrón oscuro para botones y texto fuerte */
+    --text-dark: #283618;           /* Texto principal sobre fondo claro (azul oscuro) */
+    --text-light: #fefae0;          /* Texto sobre fondo oscuro */
+    --white: #ffffff;               /* Blanco puro para tarjetas */
+    --black: #000000;               /* Negro para bordes */
+    --shadow: rgba(0, 0, 0, 0.1);
+    --bg-base: #fefae0;
+    --bg-surface: #ffffff;
+    --bg-elevated: #ffffff;
+
+    --text-primary: #283618;
+    --text-secondary: #606c38;
+    
+    /* Tamaños */
+    --font-base: 16px;
+    --spacing-unit: 8px;
+    --border-radius: 8px;
+    --touch-size: 44px;
+}
+
+/* Paleta modo oscuro (alto contraste) */
+body.dark-mode {
+    --primary-dark: #5c4d3c;       /* Marrón grisáceo */
+    --primary-deep: #004e64;       /* Azul verdoso oscuro */
+    --bg-light: #030717;            /* Fondo oscuro profundo */
+    --accent-warm: #935e38;         /* Marrón anaranjado */
+    --accent-strong: #b76935;       /* Naranja brillante para acentos fuertes */
+    --text-dark: #b76935;            /* Texto claro naranja (sobre fondo oscuro) */
+    --text-light: #fefae0;           /* Texto muy claro para contrastar */
+    --white: #011B29;                /* Fondo de tarjetas ligeramente más claro */
+    --black: #0a1a1f;                /* Casi negro */
+    --shadow: rgba(255, 255, 255, 0.1);
+    --bg-base: #0a1a1f;
+    --bg-surface: #1e2f3a;
+    --bg-elevated: #243642;
+    
+    --text-primary: #fefae0;
+    --text-secondary: #dda15e;
+}

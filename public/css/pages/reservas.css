@@ -1,0 +1,55 @@
+/* ========== PÁGINA DE RESERVAS - SEMÁFORO DE HORAS ========== */
+.semaforo-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.bloque-hora {
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.bloque-hora:hover {
+    transform: scale(1.05);
+}
+
+.hora {
+    font-size: 18px;
+}
+
+.estado-hora {
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.verde {
+    background: #4CAF50;
+    color: white;
+}
+
+.amarillo {
+    background: #FFC107;
+    color: black;
+}
+
+.rojo {
+    background: #F44336;
+    color: white;
+    cursor: not-allowed;
+}
+
+.gris {
+    background: #BDBDBD;
+    color: white;
+    cursor: not-allowed;
+}
+
+.seleccionado {
+    border: 3px solid #000;
+}

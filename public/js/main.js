@@ -6,9 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const accessibilityPanel = document.getElementById('accessibilityPanel');
     const fontIncreaseBtn = document.getElementById('fontIncrease');
     const fontDecreaseBtn = document.getElementById('fontDecrease');
-    const darkModeToggle = document.getElementById('darkModeToggle');
     const screenReaderBtn = document.getElementById('screenReader');
-    const darkModeIcon = darkModeToggle?.querySelector('.material-symbols-outlined');
 
     // Cargar preferencias guardadas
     (function loadPreferences() {
@@ -16,11 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (fontSize) {
             document.documentElement.style.fontSize = fontSize + 'px';
         }
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark-mode');
-            if (darkModeIcon) darkModeIcon.textContent = 'light_mode';
-        } else {
-            if (darkModeIcon) darkModeIcon.textContent = 'dark_mode';
+        // Tema oscuro - usando el switch
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.checked = true;
+            }
         }
     })();
 
@@ -65,16 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Alternar modo oscuro/claro
-    if (darkModeToggle && darkModeIcon) {
-        darkModeToggle.addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDark);
-            darkModeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
-        });
-    }
-
     // Leer pantalla con Web Speech API
     if (screenReaderBtn) {
         screenReaderBtn.addEventListener('click', function() {
@@ -95,6 +86,49 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } else {
                 alert('Lo sentimos, tu navegador no soporta la lectura por voz.');
+            }
+        });
+    }
+
+    // ========== SWITCH DE TEMA (UIVERSE) ==========
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    }
+
+    // ========== DROPDOWN DE IDIOMAS ACCESIBLE ==========
+    const languageBtn = document.querySelector('.language-btn');
+    const languageMenu = document.querySelector('.language-menu');
+
+    if (languageBtn && languageMenu) {
+        languageBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const expanded = this.getAttribute('aria-expanded') === 'true' ? false : true;
+            this.setAttribute('aria-expanded', expanded);
+            languageMenu.hidden = !expanded;
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!languageBtn.contains(e.target) && !languageMenu.contains(e.target)) {
+                languageBtn.setAttribute('aria-expanded', 'false');
+                languageMenu.hidden = true;
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && languageMenu.hidden === false) {
+                languageBtn.setAttribute('aria-expanded', 'false');
+                languageMenu.hidden = true;
+                languageBtn.focus();
             }
         });
     }
@@ -133,14 +167,12 @@ document.addEventListener('DOMContentLoaded', function() {
             cartClose.addEventListener('click', closeCart);
         }
 
-        // Cerrar al hacer clic fuera
         document.addEventListener('click', function(e) {
             if (!cartSidebar.contains(e.target) && !cartToggle.contains(e.target) && cartSidebar.classList.contains('open')) {
                 closeCart();
             }
         });
 
-        // Cerrar con tecla ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && cartSidebar.classList.contains('open')) {
                 closeCart();
@@ -156,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 500);
     }
 
-    // ========== CARRUSEL (estilo slide con vista previa) ==========
+    // ========== CARRUSEL ==========
     (function() {
         const next = document.querySelector('.carousel-next');
         const prev = document.querySelector('.carousel-prev');
@@ -224,8 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     })();
 
-    // ========== FUNCIONALIDAD ADICIONAL EXISTENTE ==========
-    // Confirmación para enlaces de eliminar (compatible con versión anterior)
+    // ========== CONFIRMACIÓN PARA ELIMINAR ==========
     const removeLinks = document.querySelectorAll('.remove-link');
     removeLinks.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -235,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Auto-ocultar alertas después de 5 segundos
+    // ========== AUTO-OCULTAR ALERTAS ==========
     const alerts = document.querySelectorAll('.alert');
     alerts.forEach(alert => {
         setTimeout(() => {
@@ -247,28 +278,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     });
 
-    // ========== NUEVA FUNCIONALIDAD: CARRITO DINÁMICO (AJAX) ==========
-    // Solo si el carrito existe en la página
+    // ========== CARRITO DINÁMICO (AJAX) ==========
     if (!cartSidebar) return;
 
-    // Función para refrescar todo el contenido del carrito desde el servidor
     function refreshCartView() {
         fetch('index.php?controller=carrito&action=render')
             .then(response => response.text())
             .then(html => {
-                // Reemplazar el contenido interno del aside (sin eliminar el contenedor)
                 const newContent = document.createElement('div');
                 newContent.innerHTML = html;
-                // Extraer los elementos que nos interesan: el header, la lista, el resumen y acciones
-                // Como el HTML devuelto es el aside completo, podemos reemplazar todo el interior
-                // Mantenemos el mismo elemento cartSidebar, pero actualizamos su innerHTML
                 cartSidebar.innerHTML = newContent.querySelector('.cart-sidebar').innerHTML;
-                // No es necesario reasignar eventos porque usamos delegación en cartSidebar
             })
             .catch(error => console.error('Error al refrescar el carrito:', error));
     }
 
-    // Función para actualizar cantidad vía AJAX
     function actualizarCantidad(itemId, nuevaCantidad) {
         const formData = new FormData();
         formData.append('id', itemId);
@@ -281,7 +304,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Refrescar la vista completa del carrito para mantener consistencia
                 refreshCartView();
             } else {
                 alert('Error al actualizar la cantidad');
@@ -290,7 +312,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error:', error));
     }
 
-    // Función para eliminar un item vía AJAX
     function eliminarItem(itemId) {
         fetch(`index.php?controller=carrito&action=quitarAjax&id=${itemId}`)
         .then(response => response.json())
@@ -304,9 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error:', error));
     }
 
-    // Delegación de eventos en el sidebar del carrito
     cartSidebar.addEventListener('click', function(e) {
-        // Botón disminuir (-)
         if (e.target.classList.contains('qty-btn') && e.target.classList.contains('minus')) {
             e.preventDefault();
             const itemId = e.target.dataset.id;
@@ -319,20 +338,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         }
-        // Botón aumentar (+)
         else if (e.target.classList.contains('qty-btn') && e.target.classList.contains('plus')) {
             e.preventDefault();
             const itemId = e.target.dataset.id;
             const input = cartSidebar.querySelector(`.quantity-input[data-id="${itemId}"]`);
             if (input) {
                 let newVal = parseInt(input.value) + 1;
-                if (newVal <= 10) { // Respetar el máximo definido
+                if (newVal <= 10) {
                     input.value = newVal;
                     actualizarCantidad(itemId, newVal);
                 }
             }
         }
-        // Botón eliminar (aspa)
         else if (e.target.classList.contains('remove-item') || e.target.closest('.remove-item')) {
             e.preventDefault();
             const btn = e.target.closest('.remove-item');
@@ -343,18 +360,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Delegación para el evento change en los inputs de cantidad (cuando pierde el foco)
     cartSidebar.addEventListener('change', function(e) {
         if (e.target.classList.contains('quantity-input')) {
             const input = e.target;
             const itemId = input.dataset.id;
             let newVal = parseInt(input.value);
-            // Validar rango
             if (isNaN(newVal) || newVal < 1) newVal = 1;
             if (newVal > 10) newVal = 10;
             input.value = newVal;
             actualizarCantidad(itemId, newVal);
         }
     });
-
 });

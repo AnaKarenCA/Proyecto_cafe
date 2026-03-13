@@ -1,0 +1,70 @@
+/* ========== CHECKOUT ========== */
+.checkout-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.checkout-content {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.checkout-items {
+    flex: 2;
+    min-width: 300px;
+}
+
+.checkout-form {
+    flex: 1;
+    min-width: 250px;
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 5px var(--shadow);
+}
+
+.checkout-form .form-group {
+    margin-bottom: 20px;
+}
+
+.checkout-form label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-dark);
+}
+
+.checkout-form select,
+.checkout-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--primary-deep);
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: var(--white);
+    color: var(--text-dark);
+}
+
+body.dark-mode .checkout-form select,
+body.dark-mode .checkout-form textarea {
+    background-color: #1e2f3a;
+    color: var(--text-dark);
+    border-color: var(--accent-warm);
+}
+
+.checkout-form textarea {
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.form-actions .btn {
+    flex: 1;
+}

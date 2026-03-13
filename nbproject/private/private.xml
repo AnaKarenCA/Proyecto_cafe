@@ -7,7 +7,6 @@
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Usuario.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/UsuarioController.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/productos/lista.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/AuthController.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/ProductoController.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Producto.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Categoria.php</file>
@@ -15,6 +14,25 @@
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/menu.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/auth_header.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/header.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/AdminProductoController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/AdminCategoriaController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/AdminPedidoController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/AdminReservaController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/categorias/lista.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/pedidos/lista.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/reservas/lista.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/productos/editar.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/IdiomaController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/welcome.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/productos.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/producto_detalle.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/categorias.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/categoria.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/WelcomeController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/categorias/crear.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/categorias/editar.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/docker/docker-compose.yml</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/config/database.php</file>
         </group>
     </open-files>
 </project-private>

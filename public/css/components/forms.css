@@ -1,0 +1,44 @@
+/* ========== FORMULARIOS ========== */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="date"],
+.form-group input[type="time"],
+.form-group input[type="number"],
+.form-group input[type="tel"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--primary-deep);
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    min-height: var(--touch-size);
+    background-color: var(--white);
+    color: var(--text-dark);
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group textarea,
+body.dark-mode .form-group select {
+    background-color: #1e2f3a;
+    color: var(--text-dark);
+    border-color: var(--accent-warm);
+}
+
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}

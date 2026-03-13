@@ -1,0 +1,90 @@
+/* ========== TABLAS (para carrito completo, admin, etc.) ========== */
+.cart-full-table,
+.tabla-pedidos {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 2px 5px var(--shadow);
+    margin: 20px 0;
+}
+
+.cart-full-table th,
+.cart-full-table td,
+.tabla-pedidos th,
+.tabla-pedidos td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--accent-warm);
+}
+
+.cart-full-table th,
+.tabla-pedidos th {
+    background-color: var(--primary-deep);
+    color: var(--text-light);
+    font-weight: bold;
+}
+
+.cart-full-table td,
+.tabla-pedidos td {
+    color: var(--text-dark);
+    vertical-align: middle;
+}
+
+.cart-full-table tfoot td {
+    font-weight: bold;
+    background-color: var(--accent-warm);
+    color: var(--text-light);
+}
+
+.cart-product-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cart-product-info img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.update-form-inline {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.btn-remove {
+    color: var(--accent-strong);
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 10px;
+    border: 1px solid var(--accent-strong);
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.btn-remove:hover {
+    background-color: var(--accent-strong);
+    color: var(--text-light);
+}
+
+.text-right {
+    text-align: right;
+}
+
+.empty-cart-full {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 5px var(--shadow);
+}
+
+.empty-cart-full p {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}

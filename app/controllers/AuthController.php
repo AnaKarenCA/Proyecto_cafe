@@ -41,14 +41,16 @@ public function login() {
 
         session_regenerate_id(true);
 
-        $_SESSION['usuario_id'] = $usuario['id_usuario'];
-        $_SESSION['usuario_nombre'] = $usuario['nombre'];
+        // Suponiendo que ya tienes $usuario con los datos
+$_SESSION['usuario_id'] = $usuario['id_usuario'];
+$_SESSION['usuario_nombre'] = $usuario['nombre'];
+$_SESSION['rol'] = $usuario['rol'];
 
-        /* ESTA LÍNEA ES LA IMPORTANTE */
-        $_SESSION['rol'] = $usuario['rol'];
-
-        $_SESSION['idioma'] = $this->usuarioModel->getIdioma($usuario['id_usuario']);
-
+// Cargar configuración del usuario (idioma, tema)
+$configModel = new UsuarioConfiguracion();
+$config = $configModel->getById($usuario['id_usuario']);
+$_SESSION['idioma'] = $config['idioma'] ?? 'es';
+$_SESSION['tema'] = $config['tema'] ?? 'claro';
         header('Location: index.php?controller=welcome&action=index');
         exit;
 
