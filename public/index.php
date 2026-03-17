@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+require_once __DIR__ . '/../app/helpers/i18n.php';
+
 // Definir constantes de ruta
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
@@ -119,6 +121,14 @@ switch ($request) {
         $controller = new CarritoController();
         $controller->quitar();
         break;
+    case '/carrito/totalItems':
+    $controller = new CarritoController();
+    $controller->totalItems();
+    break;
+case '/carrito/actualizarCantidad':
+    $controller = new CarritoController();
+    $controller->actualizarCantidad();
+    break;
 
     default:
         http_response_code(404);

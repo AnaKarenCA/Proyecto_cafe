@@ -27,10 +27,10 @@ return [
     'eliminar'        => 'Delete',
     'confirmar'       => 'Are you sure?',
     
-    'administrar_productos' => 'Administrar productos',
-'administrar_categorias' => 'Administrar categorías',
-'ver_pedidos' => 'Ver pedidos',
-'ver_reservas' => 'Ver reservas',
-'menu_usuario' => 'Menú de usuario',
-'usuario' => 'Usuario',
+'administrar_productos'  => 'Manage products',
+'administrar_categorias' => 'Manage categories',
+'ver_pedidos'            => 'View orders',
+'ver_reservas'           => 'View reservations',
+'menu_usuario'           => 'User menu',
+'usuario'                => 'User',
 ];

@@ -371,4 +371,5 @@ document.addEventListener('DOMContentLoaded', function() {
             actualizarCantidad(itemId, newVal);
         }
     });
+    
 });

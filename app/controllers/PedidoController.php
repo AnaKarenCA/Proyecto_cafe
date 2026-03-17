@@ -15,7 +15,15 @@ class PedidoController {
         $this->detalleModel = new DetallePedido();
         $this->productoModel = new Producto();
     }
-
+    public function show($id) {
+    $productoModel = new Producto();
+    $producto = $productoModel->getById($id);
+    if (!$producto) {
+        header("HTTP/1.0 404 Not Found");
+        die('Producto no encontrado');
+    }
+    require __DIR__ . '/../views/producto_detalle.php';
+}
     public function repetir() {
 
         if (!isset($_SESSION['usuario_id'])) {

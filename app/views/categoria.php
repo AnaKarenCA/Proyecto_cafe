@@ -10,36 +10,36 @@
     <?php if (!empty($productos)): ?>
         <div class="productos-grid">
             <?php foreach ($productos as $producto): ?>
-    <div class="product-card">
+                <div class="product-card">
 
-        <img src="img/productos\<?= htmlspecialchars($producto['imagen'] ?? 'default.jpg') ?>" 
-             alt="<?= htmlspecialchars($producto['nombre']) ?>">
+                    <img src="/img/productos/<?= htmlspecialchars($producto['imagen'] ?? 'default.jpg') ?>" 
+                         alt="<?= htmlspecialchars($producto['nombre']) ?>">
 
-        <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
+                    <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
 
-        <p><?= htmlspecialchars($producto['descripcion'] ?? '') ?></p>
+                    <p><?= htmlspecialchars($producto['descripcion'] ?? '') ?></p>
 
-        <p class="price">
-            $<?= number_format($producto['precio'], 2) ?> MXN
-        </p>
+                    <p class="price">
+                        $<?= number_format($producto['precio'], 2) ?> MXN
+                    </p>
 
-        <div class="product-actions">
-            <a href="index.php?controller=producto&action=show&id=<?= $producto['id_producto'] ?>" 
-               class="btn btn-secondary">
-                Ver detalles
-            </a>
+                    <div class="product-actions">
+                        <a href="index.php?controller=producto&action=show&id=<?= $producto['id_producto'] ?>" 
+                           class="btn btn-secondary">
+                            Ver detalles
+                        </a>
 
-            <form action="index.php?controller=carrito&action=agregar" method="POST">
-                <input type="hidden" name="id" value="<?= $producto['id_producto'] ?>">
-                <input type="hidden" name="cantidad" value="1">
-                <button type="submit" class="btn btn-primary">
-                    Agregar
-                </button>
-            </form>
-        </div>
+                        <form action="index.php?controller=carrito&action=agregar" method="POST" class="add-to-cart-form">
+                            <input type="hidden" name="id" value="<?= $producto['id_producto'] ?>">
+                            <input type="hidden" name="cantidad" value="1">
+                            <button type="submit" class="btn btn-primary">
+                                Agregar
+                            </button>
+                        </form>
+                    </div>
 
-    </div>
-<?php endforeach; ?>
+                </div>
+            <?php endforeach; ?>
         </div>
     <?php else: ?>
         <p>No hay productos en esta categoría.</p>

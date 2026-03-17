@@ -16,21 +16,20 @@ class Pedido {
      * @param string $metodo_pago
      * @return int|false ID del pedido o false si falla
      */
-    public function crear($id_usuario, $total, $comentarios, $metodo_pago) {
-        $sql = "INSERT INTO pedidos (id_usuario, total, estado, metodo_pago, comentarios) 
-                VALUES (:id_usuario, :total, 'pendiente', :metodo_pago, :comentarios)";
-        $stmt = $this->db->prepare($sql);
-        $result = $stmt->execute([
-            'id_usuario' => $id_usuario,
-            'total' => $total,
-            'metodo_pago' => $metodo_pago,
-            'comentarios' => $comentarios
-        ]);
-        if ($result) {
-            return $this->db->lastInsertId();
-        }
-        return false;
-    }
+    public function crear($data)
+{
+    $sql = "INSERT INTO pedidos (id_usuario, total, estado, metodo_pago, comentarios) 
+            VALUES (:id_usuario, :total, :estado, :metodo_pago, :comentarios)";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([
+        'id_usuario' => $data['id_usuario'],
+        'total' => $data['total'],
+        'estado' => $data['estado'],
+        'metodo_pago' => $data['metodo_pago'],
+        'comentarios' => $data['comentarios']
+    ]);
+    return $this->db->lastInsertId();
+}
     public function obtenerPorId($id) {
     $sql = "SELECT * FROM pedidos WHERE id = ?";
     $stmt = $this->db->prepare($sql);

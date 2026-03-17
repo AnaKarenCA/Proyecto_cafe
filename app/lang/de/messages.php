@@ -26,10 +26,11 @@ return [
     'editar'          => 'Bearbeiten',
     'eliminar'        => 'Löschen',
     'confirmar'       => 'Sind Sie sicher?',
-    'administrar_productos' => 'Administrar productos',
-'administrar_categorias' => 'Administrar categorías',
-'ver_pedidos' => 'Ver pedidos',
-'ver_reservas' => 'Ver reservas',
-'menu_usuario' => 'Menú de usuario',
-'usuario' => 'Usuario',
+
+    'administrar_productos'  => 'Produkte verwalten',
+'administrar_categorias' => 'Kategorien verwalten',
+'ver_pedidos'            => 'Bestellungen anzeigen',
+'ver_reservas'           => 'Reservierungen anzeigen',
+'menu_usuario'           => 'Benutzermenü',
+'usuario'                => 'Benutzer',
 ];

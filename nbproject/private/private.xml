@@ -3,36 +3,96 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/docker/init/01_init.sql</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Usuario.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/UsuarioController.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/productos/lista.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/ProductoController.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Producto.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Categoria.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/productos/crear.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/menu.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/auth_header.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/header.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/AdminProductoController.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/AdminCategoriaController.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/AdminPedidoController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/AdminProductoController.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/AdminReservaController.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/categorias/lista.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/pedidos/lista.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/reservas/lista.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/productos/editar.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/AuthController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/CarritoController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/CategoriaController.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/IdiomaController.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/welcome.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/productos.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/producto_detalle.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/categorias.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/categoria.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/LanguageController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/PedidoController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/ProductoController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/ReservaController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/UsuarioController.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/WelcomeController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Carrito.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Categoria.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/DetallePedido.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Pedido.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Producto.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Reserva.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Usuario.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/UsuarioConfiguracion.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/js/main.js</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/categorias/crear.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/categorias/editar.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/docker/docker-compose.yml</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/categorias/lista.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/pedidos/lista.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/productos/crear.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/productos/editar.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/productos/lista.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/admin/reservas/lista.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/auth/login.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/auth/registro.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/auth_footer.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/auth_header.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/carrito.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/footer.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/header.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/layout/menu.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/carrito.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/carrito_completo.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/categoria.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/categorias.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/checkout.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/producto_detalle.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/productos.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/reserva.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/views/welcome.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/config/database.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/base/reset.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/base/typography.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/base/variables.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/accessibility.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/alerts.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/buttons.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/cards.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/carousel.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/dropdown.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/forms.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/tables.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/theme-switch.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/layout/footer.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/layout/grid.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/layout/header.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/layout/menu.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/layout/sidebar.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/pages/admin.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/pages/auth.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/pages/checkout.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/pages/home.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/pages/perfil.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/pages/producto-detalle.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/pages/productos.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/pages/reservas.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/css.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/responsive.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/style.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/index.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/docker/init/01_init.sql</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/CheckoutController.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Tamano.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/lang/es/messages.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/lang/en/messages.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/lang/de/messages.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Alergeno.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Extra.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/docker/docker-compose.yml</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/js/cart.js</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/helpers/i18n.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/config/routes.php</file>
         </group>
     </open-files>
 </project-private>

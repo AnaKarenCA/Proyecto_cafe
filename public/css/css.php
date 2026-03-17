@@ -23,13 +23,12 @@ $files = [
     'pages/checkout.css',
     'pages/auth.css',
     'pages/perfil.css',
-    'pages/reservas.css',      // NUEVO
-    'pages/admin.css',          // NUEVO
-    'components/theme-switch.css', 
-    'layout/menu.css', 
+    'pages/reservas.css',
+    'pages/admin.css',
+    'components/theme-switch.css',
+    'layout/menu.css',
+    'pages/carrito.css', 
     'responsive.css'
-    
-    
 ];
 
 foreach ($files as $file) {
@@ -38,6 +37,9 @@ foreach ($files as $file) {
         echo "/* $file */\n";
         readfile($path);
         echo "\n\n";
+    } else {
+        // Opcional: mensaje de advertencia en comentario
+        echo "/* Archivo no encontrado: $file */\n\n";
     }
 }
 ?>

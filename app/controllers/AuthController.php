@@ -136,8 +136,7 @@ $_SESSION['tema'] = $config['tema'] ?? 'claro';
     public function cambiarIdioma() {
 
         $lang = $_GET['lang'] ?? 'es';
-        $permitidos = ['es', 'en'];
-
+        $permitidos = ['es', 'en', 'de'];
         if (!in_array($lang, $permitidos)) {
             $lang = 'es';
         }

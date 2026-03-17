@@ -387,3 +387,138 @@ UPDATE usuarios
 SET rol = 'admin' 
 WHERE cuenta = 'admin';
 
+UPDATE categorias SET icono = 'mode_heat' WHERE id_categoria = 1;     -- Bebidas Calientes
+UPDATE categorias SET icono = 'ac_unit' WHERE id_categoria = 2;       -- Bebidas Frías
+UPDATE categorias SET icono = 'chef_hat' WHERE id_categoria = 3;      -- Repostería
+UPDATE categorias SET icono = 'local_dining' WHERE id_categoria = 4;  -- Comida
+
+
+-- Agregar campos a la tabla pedidos
+ALTER TABLE pedidos 
+ADD COLUMN tipo_entrega ENUM('pickup','delivery') DEFAULT 'pickup',
+ADD COLUMN direccion TEXT NULL,
+ADD COLUMN fecha_entrega DATE NULL,
+ADD COLUMN hora_entrega TIME NULL,
+ADD COLUMN metodo_pago_detalle TEXT NULL; -- para guardar info adicional (ej. CLABE, etc.)
+
+-- Crear tabla para ingredientes eliminados (si quieres guardar preferencias)
+CREATE TABLE detalle_ingrediente_eliminado (
+    id_detalle INT NOT NULL,
+    id_ingrediente INT NOT NULL, -- podrías referenciar una tabla de ingredientes o usar nombre
+    PRIMARY KEY (id_detalle, id_ingrediente),
+    FOREIGN KEY (id_detalle) REFERENCES detalle_pedido(id_detalle) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Nota: No tienes una tabla de ingredientes, así que podrías guardar como JSON en comentarios.
+-- Por simplicidad, usaremos un campo JSON en detalle_pedido.
+ALTER TABLE detalle_pedido ADD COLUMN personalizacion JSON NULL;
+
+CREATE TABLE ingredientes (
+    id_ingrediente INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_ingrediente VARCHAR(100) NOT NULL
+);
+INSERT INTO ingredientes (nombre_ingrediente) VALUES
+('Canela'),
+('Azúcar'),
+('Hielo'),
+('Leche'),
+('Pan'),
+('Pollo'),
+('Mayonesa'),
+('Lechuga');
+
+CREATE TABLE producto_ingrediente (
+    id_producto INT,
+    id_ingrediente INT,
+    PRIMARY KEY (id_producto, id_ingrediente),
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE,
+    FOREIGN KEY (id_ingrediente) REFERENCES ingredientes(id_ingrediente) ON DELETE CASCADE
+);
+
+-- Caviar Latte
+INSERT INTO producto_ingrediente VALUES
+(1,1),(1,2),(1,3),(1,4);
+
+-- Sandwich
+INSERT INTO producto_ingrediente VALUES
+(9,5),(9,6),(9,7),(9,8);
+
+CREATE TABLE producto_nutricion (
+    id_producto INT PRIMARY KEY,
+    kcal INT,
+    grasas DECIMAL(5,2),
+    azucares DECIMAL(5,2),
+    proteina DECIMAL(5,2),
+    sodio INT,
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE
+);
+
+
+INSERT INTO producto_nutricion VALUES
+(1,250,9,25,5,150),
+(9,420,15,5,30,500);
+
+
+TRUNCATE TABLE producto_extra;
+
+INSERT INTO producto_extra VALUES
+(1,1),(1,2),(1,3),(1,4),
+(2,1),(2,2),(2,3),(2,4),
+(3,1),(3,2),(3,4),
+(4,1),(4,2),
+(5,1),(5,2),(5,3),
+(6,1),(6,2),
+(7,4);
+
+INSERT INTO producto_extra VALUES
+(8,1),(8,2);
+INSERT INTO producto_extra VALUES
+(9,1);
+
+INSERT INTO producto_extra VALUES
+(10,1),
+(11,1),(11,2);
+
+TRUNCATE TABLE producto_tamano;
+INSERT INTO producto_tamano VALUES
+(1,1),(1,2),(1,3),
+(2,1),(2,2),(2,3),
+(3,1),(3,2),(3,3),
+(4,1),(4,2),(4,3),
+(5,1),(5,2),(5,3),
+(6,1),(6,2),(6,3),
+(7,1),(7,2),(7,3);
+
+
+INSERT INTO producto_tamano VALUES
+(8,1),(8,2),(8,3);
+
+INSERT INTO producto_tamano VALUES
+(9,1);
+
+INSERT INTO producto_tamano VALUES
+(10,1),
+(11,1);
+
+TRUNCATE TABLE producto_alergeno;
+
+INSERT INTO producto_alergeno VALUES
+(1,2),
+(2,2),
+(3,2),
+(4,2),
+(5,2),
+(6,2),
+(7,2),
+(8,2),
+(9,1),
+(10,1),
+(11,1);
+
+ALTER TABLE producto_extra
+ADD CONSTRAINT fk_producto_extra_producto
+FOREIGN KEY (id_producto) REFERENCES productos(id_producto);
+
+ALTER TABLE producto_extra
+ADD CONSTRAINT fk_producto_extra_extra
+FOREIGN KEY (id_extra) REFERENCES extras(id_extra);

@@ -114,6 +114,6 @@
 </section>
 
 <!-- Incluir carrito como panel lateral -->
-<?php include __DIR__ . '/carrito.php'; ?>
+
 
 <?php include __DIR__ . '/layout/footer.php'; ?>
