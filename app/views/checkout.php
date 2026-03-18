@@ -1,14 +1,14 @@
 <?php
 $titulo = __('checkout_titulo');
-// Estas variables vienen del controlador
 $subtotal = $subtotal ?? 0;
 $impuestos = $impuestos ?? 0;
 $total = $total ?? 0;
+$usuario = $usuario ?? [];
+$hoy = $hoy ?? date('Y-m-d');
 include __DIR__ . '/layout/header.php';
 ?>
 
 <style>
-    /* Estilos específicos de checkout, usando tus variables */
     :root {
         --primary: var(--accent-strong);
         --secondary: var(--accent-warm);
@@ -40,14 +40,164 @@ include __DIR__ . '/layout/header.php';
     input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 0.95rem; font-family: inherit; background-color: var(--white); color: var(--text-dark); }
     input:focus { outline: none; border-color: var(--secondary); }
 
-    .btn-next { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 20px; }
-    .btn-back { background: none; color: var(--gray); border: none; margin-top: 10px; cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
+    /* Botones con flecha */
+    .btn-next, .btn-back {
+        --primary-color: var(--accent-strong);
+        --secondary-color: #fff;
+        --hover-color: #111;
+        --arrow-width: 10px;
+        --arrow-stroke: 2px;
+        box-sizing: border-box;
+        border: 0;
+        border-radius: 20px;
+        color: var(--secondary-color);
+        padding: 1em 1.8em;
+        background: var(--primary-color);
+        display: flex;
+        transition: 0.2s background;
+        align-items: center;
+        gap: 0.6em;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 20px;
+        width: 100%;
+        justify-content: center;
+    }
 
+    .btn-next .arrow-wrapper, .btn-back .arrow-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-next .arrow, .btn-back .arrow {
+        margin-top: 1px;
+        width: var(--arrow-width);
+        background: var(--primary-color);
+        height: var(--arrow-stroke);
+        position: relative;
+        transition: 0.2s;
+    }
+
+    .btn-next .arrow::before {
+        content: "";
+        box-sizing: border-box;
+        position: absolute;
+        border: solid var(--secondary-color);
+        border-width: 0 var(--arrow-stroke) var(--arrow-stroke) 0;
+        display: inline-block;
+        top: -3px;
+        right: 3px;
+        transition: 0.2s;
+        padding: 3px;
+        transform: rotate(-45deg);
+    }
+
+    .btn-back .arrow::before {
+        content: "";
+        box-sizing: border-box;
+        position: absolute;
+        border: solid var(--secondary-color);
+        border-width: var(--arrow-stroke) 0 0 var(--arrow-stroke);
+        display: inline-block;
+        top: -3px;
+        left: 3px;
+        transition: 0.2s;
+        padding: 3px;
+        transform: rotate(-45deg);
+    }
+
+    .btn-next:hover, .btn-back:hover {
+        background-color: var(--hover-color);
+    }
+
+    .btn-next:hover .arrow, .btn-back:hover .arrow {
+        background: var(--secondary-color);
+    }
+
+    .btn-next:hover .arrow:before {
+        right: 0;
+    }
+
+    .btn-back:hover .arrow:before {
+        left: 0;
+    }
+
+    .btn-back {
+        background: var(--gray);
+        margin-top: 10px;
+    }
+
+    .btn-back .arrow-wrapper {
+        order: -1;
+    }
+
+    /* Radios animados */
+    .radio-input {
+        display: flex;
+        flex-direction: row;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        color: white;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .radio-input input[type="radio"] {
+        display: none;
+    }
+
+    .radio-input label {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #ccc;
+        background-color: #212121;
+        border-radius: 5px;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.3s ease-in-out;
+        color: white;
+    }
+
+    .radio-input label:before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translate(-50%, -50%);
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #fff;
+        border: 2px solid #ccc;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .radio-input input[type="radio"]:checked + label:before {
+        background-color: green;
+        top: 0;
+    }
+
+    .radio-input input[type="radio"]:checked + label {
+        background-color: royalblue;
+        color: #fff;
+        border-color: rgb(129, 235, 129);
+        animation: radio-translate 0.5s ease-in-out;
+    }
+
+    @keyframes radio-translate {
+        0% { transform: translateX(0); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateX(0); }
+    }
+
+    /* Estilos de métodos de pago (sin cambios) */
     .payment-method { border: 2px solid #eee; padding: 15px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; transition: 0.3s; }
     .payment-method.selected { border-color: var(--primary); background: #fdf5f0; }
-
     .copy-box { background: #f8f8f8; padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-top: 5px; font-family: monospace; border: 1px solid #eee; }
-
     .invoice { border: 2px dashed #ccc; padding: 20px; border-radius: 10px; font-family: monospace; background: #fff; margin-bottom: 20px; }
     .reminders { background: #fff8e1; padding: 15px; border-radius: 10px; border-left: 4px solid #ffc107; font-size: 0.85rem; color: #6d4c41; }
     .reminders li { margin-left: 20px; margin-bottom: 5px; }
@@ -62,59 +212,78 @@ include __DIR__ . '/layout/header.php';
     </div>
 
     <div class="card">
+        <!-- Fase 1 -->
         <div class="phase active" id="phase1">
             <h2><?= __('order_type') ?></h2>
-            <div class="form-group">
-                <label><?= __('how_would_you_like_order') ?></label>
-                <select id="order-type" onchange="toggleDeliveryAddress()">
-                    <option value="pickup"><?= __('store_pickup') ?></option>
-                    <option value="delivery"><?= __('home_delivery') ?></option>
-                </select>
+            <div class="radio-input">
+                <input type="radio" name="tipo_entrega" id="pickup" value="pickup" checked>
+                <label for="pickup"><?= __('store_pickup') ?></label>
+                <input type="radio" name="tipo_entrega" id="delivery" value="delivery">
+                <label for="delivery"><?= __('home_delivery') ?></label>
             </div>
-            <label><?= __('pickup_delivery_date_time') ?></label>
-            <div class="grid-2">
-                <input type="date" id="order-date">
-                <div style="display: flex; gap: 5px;">
-                    <input type="number" placeholder="HH" min="1" max="12" id="order-hr">
-                    <input type="number" placeholder="MM" min="0" max="59" id="order-min">
-                    <select id="order-ampm" style="width: 80px;">
-                        <option>AM</option>
-                        <option>PM</option>
-                    </select>
+            <div class="form-group">
+                <label><?= __('pickup_delivery_date_time') ?></label>
+                <div class="grid-2">
+                    <input type="date" id="order-date" value="<?= $hoy ?>">
+                    <div style="display: flex; gap: 5px;">
+                        <input type="number" id="order-hr" placeholder="HH" min="1" max="12" value="12">
+                        <input type="number" id="order-min" placeholder="MM" min="0" max="59" value="00">
+                        <select id="order-ampm" style="width: 80px;">
+                            <option>AM</option>
+                            <option selected>PM</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-            <button class="btn-next" onclick="goToStep(2)"><?= __('customer_details') ?> &rarr;</button>
+            <button class="btn-next" onclick="goToStep(2)">
+                <span><?= __('customer_details') ?></span>
+                <div class="arrow-wrapper"><div class="arrow"></div></div>
+            </button>
         </div>
 
+        <!-- Fase 2 -->
         <div class="phase" id="phase2">
             <h2><?= __('customer_details') ?></h2>
             <div class="grid-2">
-                <div class="form-group"><label><?= __('first_name') ?></label><input type="text" id="fname"></div>
-                <div class="form-group"><label><?= __('last_name') ?></label><input type="text" id="lname"></div>
+                <div class="form-group">
+                    <label><?= __('first_name') ?></label>
+                    <input type="text" id="fname" value="<?= htmlspecialchars($usuario['nombre'] ?? '') ?>">
+                </div>
+                <div class="form-group">
+                    <label><?= __('last_name') ?></label>
+                    <input type="text" id="lname" value="<?= htmlspecialchars(($usuario['apellido_paterno'] ?? '') . ' ' . ($usuario['apellido_materno'] ?? '')) ?>">
+                </div>
             </div>
             <div class="form-group">
                 <label><?= __('phone') ?>*</label>
-                <input type="tel" id="phone" placeholder="(000) 000-0000">
+                <input type="tel" id="phone" placeholder="(000) 000-0000" value="<?= htmlspecialchars($usuario['telefono'] ?? '') ?>">
             </div>
             <div class="form-group">
                 <label><?= __('email') ?>*</label>
-                <input type="email" id="email" placeholder="example@example.com">
+                <input type="email" id="email" placeholder="example@example.com" value="<?= htmlspecialchars($usuario['correo'] ?? '') ?>">
             </div>
 
             <div id="delivery-fields" style="display:none;">
                 <label><?= __('delivery_address') ?></label>
-                <input type="text" placeholder="<?= __('street_address') ?>" class="form-group">
-                <input type="text" placeholder="<?= __('city') ?>" class="form-group">
+                <input type="text" placeholder="<?= __('street_address') ?>" class="form-group" id="address-street">
+                <input type="text" placeholder="<?= __('city') ?>" class="form-group" id="address-city">
                 <div class="grid-2">
-                    <input type="text" placeholder="<?= __('state') ?>">
-                    <input type="text" placeholder="<?= __('zip_code') ?>">
+                    <input type="text" placeholder="<?= __('state') ?>" id="address-state">
+                    <input type="text" placeholder="<?= __('zip_code') ?>" id="address-zip">
                 </div>
             </div>
 
-            <button class="btn-next" onclick="goToStep(3)"><?= __('payment_method') ?> &rarr;</button>
-            <center><button class="btn-back" onclick="goToStep(1)"><?= __('back') ?></button></center>
+            <button class="btn-next" onclick="goToStep(3)">
+                <span><?= __('payment_method') ?></span>
+                <div class="arrow-wrapper"><div class="arrow"></div></div>
+            </button>
+            <button class="btn-back" onclick="goToStep(1)">
+                <div class="arrow-wrapper"><div class="arrow"></div></div>
+                <span><?= __('back') ?></span>
+            </button>
         </div>
 
+        <!-- Fase 3 -->
         <div class="phase" id="phase3">
             <h2><?= __('payment_method') ?></h2>
             <div class="payment-method" onclick="selectMethod('efectivo')">
@@ -139,17 +308,24 @@ include __DIR__ . '/layout/header.php';
                 <span>💳</span> <div><strong><?= __('credit_debit_card') ?></strong><br><small><?= __('secure_transaction') ?></small></div>
             </div>
             <div id="extra-tarjeta" style="display:none; padding: 10px;">
-                <input type="text" placeholder="<?= __('card_number') ?>" maxlength="16" class="form-group">
+                <input type="text" placeholder="<?= __('card_number') ?>" maxlength="16" class="form-group" id="card-number">
                 <div class="grid-2">
-                    <input type="text" placeholder="MM/AA">
-                    <input type="text" placeholder="CVC">
+                    <input type="text" placeholder="MM/AA" id="card-expiry">
+                    <input type="text" placeholder="CVC" id="card-cvc">
                 </div>
             </div>
 
-            <button class="btn-next" onclick="goToStep(4)"><?= __('submit_order') ?></button>
-            <center><button class="btn-back" onclick="goToStep(2)"><?= __('back') ?></button></center>
+            <button class="btn-next" onclick="enviarPedido()">
+                <span><?= __('submit_order') ?></span>
+                <div class="arrow-wrapper"><div class="arrow"></div></div>
+            </button>
+            <button class="btn-back" onclick="goToStep(2)">
+                <div class="arrow-wrapper"><div class="arrow"></div></div>
+                <span><?= __('back') ?></span>
+            </button>
         </div>
 
+        <!-- Fase 4 -->
         <div class="phase" id="phase4">
             <h2><?= __('order_confirmed') ?></h2>
             <div class="invoice" id="invoice-content">
@@ -157,6 +333,7 @@ include __DIR__ . '/layout/header.php';
                 <p><?= __('order_for') ?>: <span id="inv-full-name"></span></p>
                 <p><?= __('type') ?>: <span id="inv-type"></span></p>
                 <p><?= __('date') ?>: <span id="inv-date"></span></p>
+                <p><?= __('order_id') ?>: <span id="inv-order-id"></span></p>
                 <hr style="margin:10px 0;">
                 <p><?= __('subtotal') ?>: $<span id="inv-subtotal"></span></p>
                 <p><?= __('taxes_fee') ?>: $<span id="inv-tax"></span></p>
@@ -178,15 +355,20 @@ include __DIR__ . '/layout/header.php';
 
 <script>
     let metodoActual = '';
-    // Datos del carrito (deberías pasarlos desde PHP)
-    const subtotal = <?= $subtotal ?? 0 ?>;
-    const impuestos = <?= $impuestos ?? 0 ?>;
-    const total = <?= $total ?? 0 ?>;
+    let pedidoId = null;
+
+    const subtotal = <?= $subtotal ?>;
+    const impuestos = <?= $impuestos ?>;
+    const total = <?= $total ?>;
 
     function toggleDeliveryAddress() {
-        const type = document.getElementById('order-type').value;
+        const type = document.querySelector('input[name="tipo_entrega"]:checked').value;
         document.getElementById('delivery-fields').style.display = (type === 'delivery') ? 'block' : 'none';
     }
+
+    document.querySelectorAll('input[name="tipo_entrega"]').forEach(radio => {
+        radio.addEventListener('change', toggleDeliveryAddress);
+    });
 
     function goToStep(step) {
         document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
@@ -220,13 +402,80 @@ include __DIR__ . '/layout/header.php';
         alert("<?= __('copied') ?>");
     }
 
+    function enviarPedido() {
+        const tipoEntrega = document.querySelector('input[name="tipo_entrega"]:checked').value;
+        const fecha = document.getElementById('order-date').value;
+        const hora = document.getElementById('order-hr').value.padStart(2,'0') + ':' + document.getElementById('order-min').value.padStart(2,'0') + ':00';
+
+        const nombre = document.getElementById('fname').value;
+        const apellido = document.getElementById('lname').value;
+        const telefono = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+
+        let direccion = '';
+        if (tipoEntrega === 'delivery') {
+            direccion = document.getElementById('address-street').value + ', ' +
+                       document.getElementById('address-city').value + ', ' +
+                       document.getElementById('address-state').value + ' ' +
+                       document.getElementById('address-zip').value;
+        }
+
+        const metodoPago = metodoActual;
+        let metodoPagoDetalle = '';
+        if (metodoPago === 'efectivo') {
+            metodoPagoDetalle = document.getElementById('no-cambio').checked ? 'exacto' : 'con cambio';
+            if (!document.getElementById('no-cambio').checked) {
+                metodoPagoDetalle += ', monto: ' + document.getElementById('monto-cambio').value;
+            }
+        } else if (metodoPago === 'transfe') {
+            metodoPagoDetalle = 'transferencia bancaria';
+        } else if (metodoPago === 'tarjeta') {
+            metodoPagoDetalle = 'tarjeta: ****' + document.getElementById('card-number').value.slice(-4);
+        }
+
+        const data = {
+            tipo_entrega: tipoEntrega,
+            fecha_entrega: fecha,
+            hora_entrega: hora,
+            nombre: nombre,
+            apellido: apellido,
+            telefono: telefono,
+            email: email,
+            direccion: direccion,
+            metodo_pago: metodoPago,
+            metodo_pago_detalle: metodoPagoDetalle
+        };
+
+        fetch('index.php?controller=checkout&action=procesar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                pedidoId = data.id_pedido;
+                goToStep(4);
+            } else {
+                Swal.fire('Error', data.error || 'No se pudo procesar el pedido', 'error');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            Swal.fire('Error de conexión', '', 'error');
+        });
+    }
+
     function generarFactura() {
         document.getElementById('inv-full-name').innerText = document.getElementById('fname').value + " " + document.getElementById('lname').value;
-        document.getElementById('inv-type').innerText = document.getElementById('order-type').value.toUpperCase();
+        document.getElementById('inv-type').innerText = document.querySelector('input[name="tipo_entrega"]:checked').value.toUpperCase();
         document.getElementById('inv-date').innerText = document.getElementById('order-date').value + " " + document.getElementById('order-hr').value + ":" + document.getElementById('order-min').value + " " + document.getElementById('order-ampm').value;
         document.getElementById('inv-subtotal').innerText = subtotal.toFixed(2);
         document.getElementById('inv-tax').innerText = impuestos.toFixed(2);
         document.getElementById('inv-total').innerText = total.toFixed(2);
+        if (pedidoId) {
+            document.getElementById('inv-order-id').innerText = pedidoId;
+        }
     }
 </script>
 

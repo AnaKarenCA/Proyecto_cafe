@@ -3,12 +3,13 @@ require_once __DIR__ . '/../models/Carrito.php';
 require_once __DIR__ . '/../models/Pedido.php';
 require_once __DIR__ . '/../models/DetallePedido.php';
 require_once __DIR__ . '/../models/Producto.php';
+require_once __DIR__ . '/../models/Usuario.php';
 
 class CheckoutController
 {
     public function index()
     {
-        // Verificar que el usuario haya iniciado sesión
+        // Verificar sesión
         if (!isset($_SESSION['usuario_id'])) {
             $_SESSION['error'] = "Debes iniciar sesión para continuar con el pago.";
             header('Location: index.php?controller=auth&action=showLoginForm');
@@ -23,13 +24,17 @@ class CheckoutController
             exit;
         }
 
+        // Obtener datos del usuario
+        $usuarioModel = new Usuario();
+        $usuario = $usuarioModel->getById($_SESSION['usuario_id']);
+
         $subtotal = Carrito::subtotal();
         $taxRate = $this->getTaxRate();
         $taxName = $this->getTaxName();
         $total = Carrito::total();
         $impuestos = $total - $subtotal;
+        $hoy = date('Y-m-d');
 
-        // Pasar variables a la vista
         require __DIR__ . '/../views/checkout.php';
     }
 
@@ -40,7 +45,6 @@ class CheckoutController
             exit;
         }
 
-        // Verificar sesión
         if (!isset($_SESSION['usuario_id'])) {
             http_response_code(401);
             echo json_encode(['error' => 'No autenticado']);
@@ -60,33 +64,33 @@ class CheckoutController
         $telefono = $input['telefono'] ?? '';
         $email = $input['email'] ?? '';
         $tipo_entrega = $input['tipo_entrega'] ?? 'pickup';
-        $fecha_entrega = $input['fecha'] ?? null;
-        $hora_entrega = $input['hora'] ?? null;
+        $fecha_entrega = $input['fecha_entrega'] ?? null;
+        $hora_entrega = $input['hora_entrega'] ?? null;
         $direccion = $input['direccion'] ?? '';
         $metodo_pago = $input['metodo_pago'] ?? '';
         $metodo_pago_detalle = $input['metodo_pago_detalle'] ?? '';
 
-        // Calcular total
         $total = Carrito::total();
 
-        // Crear pedido
+        $comentarios = json_encode([
+            'nombre' => $nombre,
+            'apellido' => $apellido,
+            'email' => $email,
+            'telefono' => $telefono,
+        ]);
+
         $pedidoModel = new Pedido();
         $id_pedido = $pedidoModel->crear([
             'id_usuario' => $id_usuario,
             'total' => $total,
             'estado' => 'pendiente',
             'metodo_pago' => $metodo_pago,
-            'comentarios' => json_encode([
-                'nombre' => $nombre,
-                'apellido' => $apellido,
-                'telefono' => $telefono,
-                'email' => $email,
-                'tipo_entrega' => $tipo_entrega,
-                'direccion' => $direccion,
-                'fecha_entrega' => $fecha_entrega,
-                'hora_entrega' => $hora_entrega,
-                'metodo_pago_detalle' => $metodo_pago_detalle
-            ])
+            'tipo_entrega' => $tipo_entrega,
+            'direccion' => $direccion,
+            'fecha_entrega' => $fecha_entrega,
+            'hora_entrega' => $hora_entrega,
+            'metodo_pago_detalle' => $metodo_pago_detalle,
+            'comentarios' => $comentarios
         ]);
 
         if (!$id_pedido) {
@@ -95,7 +99,6 @@ class CheckoutController
             exit;
         }
 
-        // Guardar detalles del pedido
         $items = Carrito::obtener();
         $detalleModel = new DetallePedido();
         foreach ($items as $item) {
@@ -109,7 +112,6 @@ class CheckoutController
                 'personalizacion' => json_encode($item['extras_detalle'] ?? [])
             ]);
 
-            // Guardar extras si existen
             if (!empty($item['extras_ids'])) {
                 foreach ($item['extras_ids'] as $id_extra) {
                     $detalleModel->agregarExtra($id_detalle, $id_extra);
@@ -117,7 +119,6 @@ class CheckoutController
             }
         }
 
-        // Vaciar carrito
         Carrito::vaciar();
 
         echo json_encode(['success' => true, 'id_pedido' => $id_pedido]);
@@ -126,7 +127,7 @@ class CheckoutController
     public function confirmacion($id_pedido)
     {
         $pedidoModel = new Pedido();
-        $pedido = $pedidoModel->getById($id_pedido);
+        $pedido = $pedidoModel->obtenerPorId($id_pedido);
         if (!$pedido) {
             header('Location: index.php');
             exit;
