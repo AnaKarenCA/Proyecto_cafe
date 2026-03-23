@@ -22,4 +22,9 @@ class Alergeno {
         $stmt->execute([$id_producto]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+     public function getById($id) {
+        $stmt = $this->pdo->prepare("SELECT * FROM alergeno WHERE id_alergeno = :id");
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch();
+    }
 }

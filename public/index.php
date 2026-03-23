@@ -57,10 +57,7 @@ switch ($request) {
         $controller->index();
         break;
 
-    case '/categorias':
-        $controller = new CategoriaController();
-        $controller->index();
-        break;
+
 
     case (preg_match('/^\/categoria\/(\d+)$/', $request, $matches) ? true : false):
         $controller = new CategoriaController();
@@ -128,6 +125,14 @@ switch ($request) {
 case '/carrito/actualizarCantidad':
     $controller = new CarritoController();
     $controller->actualizarCantidad();
+    break;
+case '/welcome/setLocation':
+    $controller = new WelcomeController();
+    $controller->setLocation();
+    break;
+case '/reserva/availability':
+    $controller = new ReservaController();
+    $controller->availability();
     break;
 
     default:

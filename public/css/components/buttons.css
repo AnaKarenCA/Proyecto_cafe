@@ -1,68 +1,46 @@
-/* ========== BOTONES ========== */
-.btn {
-    display: inline-block;
-    padding: 10px 20px;
-    border: none;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-    min-width: var(--touch-size);
-    min-height: var(--touch-size);
-    line-height: 1.2;
-    transition: background-color 0.3s, transform 0.1s;
-    font-weight: bold;
+/* ========== BOTÓN "VER DETALLES" (NUEVO ESTILO) ========== */
+.button {
+  cursor: pointer;
+  position: relative;
+  padding: 10px 24px;
+  font-size: 18px;
+  color: rgb(193, 163, 98);
+  border: 2px solid rgb(193, 163, 98);
+  border-radius: 34px;
+  background-color: transparent;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  overflow: hidden;
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  line-height: 1.2;
 }
 
-.btn:active {
-    transform: scale(0.98);
+.button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 50px;
+  height: 50px;
+  border-radius: inherit;
+  scale: 0;
+  z-index: -1;
+  background-color: rgb(193, 163, 98);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
 }
 
-.btn-primary {
-    background-color: var(--accent-strong);
-    color: var(--text-light);
+.button:hover::before {
+  scale: 3;
 }
 
-.btn-primary:hover,
-.btn-primary:focus {
-    background-color: var(--primary-deep);
-    outline: 2px solid var(--text-dark);
+.button:hover {
+  color: #212121;
+  scale: 1.1;
+  box-shadow: 0 0px 20px rgba(193, 163, 98, 0.4);
 }
 
-.btn-secondary {
-    background-color: var(--accent-warm);
-    color: var(--text-light);
-    border: 1px solid var(--primary-deep);
-}
-
-body.dark-mode .btn-secondary {
-    background-color: var(--accent-strong);
-    color: var(--bg-light);
-}
-
-.btn-secondary:hover,
-.btn-secondary:focus {
-    background-color: var(--primary-dark);
-    color: var(--text-light);
-}
-
-.btn-small {
-    padding: 5px 10px;
-    font-size: 0.8rem;
-    background-color: var(--accent-warm);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    color: var(--text-light);
-    font-weight: bold;
-}
-
-.btn-small:hover {
-    background-color: var(--accent-strong);
-}
-
-.btn-block {
-    width: 100%;
-    margin-top: 10px;
+.button:active {
+  scale: 1;
 }

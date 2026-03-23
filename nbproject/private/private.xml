@@ -55,15 +55,6 @@
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/base/reset.css</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/base/typography.css</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/base/variables.css</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/accessibility.css</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/alerts.css</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/buttons.css</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/cards.css</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/carousel.css</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/dropdown.css</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/forms.css</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/tables.css</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/theme-switch.css</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/layout/footer.css</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/layout/grid.css</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/layout/header.css</file>
@@ -84,9 +75,6 @@
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/docker/init/01_init.sql</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/controllers/CheckoutController.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Tamano.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/lang/es/messages.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/lang/en/messages.php</file>
-            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/lang/de/messages.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Alergeno.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Extra.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/docker/docker-compose.yml</file>
@@ -94,6 +82,17 @@
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/helpers/i18n.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/config/routes.php</file>
             <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/pages/carrito.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/helpers/WeatherHelper.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/config/weather.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/weather-card.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/img/productos/default.jpg</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/components/top-products.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/js/carousel.js</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/public/css/pages/categoria.css</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/models/Clima.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/lang/es/messages.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/lang/en/messages.php</file>
+            <file>file:/C:/Users/carmo/OneDrive/Documentos/NetBeansProjects/Proyecto_cafe/app/lang/de/messages.php</file>
         </group>
     </open-files>
 </project-private>

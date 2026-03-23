@@ -283,47 +283,56 @@ include __DIR__ . '/layout/header.php';
             </button>
         </div>
 
-        <!-- Fase 3 -->
-        <div class="phase" id="phase3">
-            <h2><?= __('payment_method') ?></h2>
-            <div class="payment-method" onclick="selectMethod('efectivo')">
-                <span>💵</span> <div><strong><?= __('cash') ?></strong><br><small><?= __('pay_on_delivery_pickup') ?></small></div>
-            </div>
-            <div id="extra-efectivo" style="display:none; padding: 10px; background: #fafafa; border-radius: 10px;">
-                <label><input type="checkbox" id="no-cambio" onchange="toggleCambio()"> <?= __('exact_payment') ?></label>
-                <input type="number" id="monto-cambio" placeholder="<?= __('amount_you_will_pay') ?>" style="margin-top:10px;">
-            </div>
+<!-- Fase 3 -->
+<div class="phase" id="phase3">
+    <h2><?= __('payment_method') ?></h2>
+    
+    <!-- Resumen de compra (mostrar antes del pago) -->
+    <div class="checkout-summary" style="background: var(--bg-surface); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+        <h3>Resumen de tu compra</h3>
+        <p><strong>Subtotal:</strong> $<?= number_format($subtotal, 2) ?></p>
+        <p><strong><?= $taxName ?>:</strong> $<?= number_format($impuestos, 2) ?></p>
+        <p><strong>Total:</strong> $<?= number_format($total, 2) ?></p>
+    </div>
 
-            <div class="payment-method" onclick="selectMethod('transfe')">
-                <span>🏛️</span> <div><strong><?= __('bank_transfer') ?></strong><br><small><?= __('instant_confirmation') ?></small></div>
-            </div>
-            <div id="extra-transfe" style="display:none; padding: 10px;">
-                <div class="copy-box">
-                    <span id="clabe">CLABE: 012345678901234567</span>
-                    <button onclick="copyText('clabe')" style="cursor:pointer; border:none; background:var(--primary); color:white; padding:2px 8px; border-radius:4px;"><?= __('copy') ?></button>
-                </div>
-            </div>
+    <div class="payment-method" onclick="selectMethod('efectivo')">
+        <span>💵</span> <div><strong><?= __('cash') ?></strong><br><small><?= __('pay_on_delivery_pickup') ?></small></div>
+    </div>
+    <div id="extra-efectivo" style="display:none; padding: 10px; background: #fafafa; border-radius: 10px;">
+        <label><input type="checkbox" id="no-cambio" onchange="toggleCambio()"> <?= __('exact_payment') ?></label>
+        <input type="number" id="monto-cambio" placeholder="<?= __('amount_you_will_pay') ?>" style="margin-top:10px;" disabled>
+    </div>
 
-            <div class="payment-method" onclick="selectMethod('tarjeta')">
-                <span>💳</span> <div><strong><?= __('credit_debit_card') ?></strong><br><small><?= __('secure_transaction') ?></small></div>
-            </div>
-            <div id="extra-tarjeta" style="display:none; padding: 10px;">
-                <input type="text" placeholder="<?= __('card_number') ?>" maxlength="16" class="form-group" id="card-number">
-                <div class="grid-2">
-                    <input type="text" placeholder="MM/AA" id="card-expiry">
-                    <input type="text" placeholder="CVC" id="card-cvc">
-                </div>
-            </div>
-
-            <button class="btn-next" onclick="enviarPedido()">
-                <span><?= __('submit_order') ?></span>
-                <div class="arrow-wrapper"><div class="arrow"></div></div>
-            </button>
-            <button class="btn-back" onclick="goToStep(2)">
-                <div class="arrow-wrapper"><div class="arrow"></div></div>
-                <span><?= __('back') ?></span>
-            </button>
+    <div class="payment-method" onclick="selectMethod('transfe')">
+        <span>🏛️</span> <div><strong><?= __('bank_transfer') ?></strong><br><small><?= __('instant_confirmation') ?></small></div>
+    </div>
+    <div id="extra-transfe" style="display:none; padding: 10px;">
+        <div class="copy-box">
+            <span id="clabe">CLABE: 012345678901234567</span>
+            <button onclick="copyText('clabe')" style="cursor:pointer; border:none; background:var(--primary); color:white; padding:2px 8px; border-radius:4px;"><?= __('copy') ?></button>
         </div>
+    </div>
+
+    <div class="payment-method" onclick="selectMethod('tarjeta')">
+        <span>💳</span> <div><strong><?= __('credit_debit_card') ?></strong><br><small><?= __('secure_transaction') ?></small></div>
+    </div>
+    <div id="extra-tarjeta" style="display:none; padding: 10px;">
+        <input type="text" placeholder="<?= __('card_number') ?>" maxlength="16" class="form-group" id="card-number">
+        <div class="grid-2">
+            <input type="text" placeholder="MM/AA" id="card-expiry">
+            <input type="text" placeholder="CVC" id="card-cvc">
+        </div>
+    </div>
+
+    <button class="btn-next" onclick="validarYEnviar()">
+        <span><?= __('submit_order') ?></span>
+        <div class="arrow-wrapper"><div class="arrow"></div></div>
+    </button>
+    <button class="btn-back" onclick="goToStep(2)">
+        <div class="arrow-wrapper"><div class="arrow"></div></div>
+        <span><?= __('back') ?></span>
+    </button>
+</div>
 
         <!-- Fase 4 -->
         <div class="phase" id="phase4">
@@ -477,6 +486,66 @@ include __DIR__ . '/layout/header.php';
             document.getElementById('inv-order-id').innerText = pedidoId;
         }
     }
+    function toggleCambio() {
+    const montoInput = document.getElementById('monto-cambio');
+    montoInput.disabled = document.getElementById('no-cambio').checked;
+    if (montoInput.disabled) {
+        montoInput.value = '';
+    }
+}
+
+function validarHorario() {
+    const fecha = document.getElementById('order-date').value;
+    const hora = document.getElementById('order-hr').value.padStart(2,'0');
+    const min = document.getElementById('order-min').value.padStart(2,'0');
+    const ampm = document.getElementById('order-ampm').value;
+
+    // Convertir a hora 24h
+    let hora24 = parseInt(hora);
+    if (ampm === 'PM' && hora24 !== 12) hora24 += 12;
+    if (ampm === 'AM' && hora24 === 12) hora24 = 0;
+
+    const horaCompleta = hora24 * 100 + parseInt(min); // formato HHMM para comparar
+
+    const horaInicio = 9 * 100;   // 9:00 AM
+    const horaFin = 17 * 100;      // 5:00 PM
+
+    if (horaCompleta < horaInicio || horaCompleta >= horaFin) {
+        Swal.fire({
+            title: 'Horario no disponible',
+            text: 'Nuestro horario de atención es de 9:00 AM a 5:00 PM. ¿Deseas pedir para mañana?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, para mañana',
+            cancelButtonText: 'Elegir otra hora'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Calcular fecha de mañana
+                const hoy = new Date();
+                const manana = new Date(hoy);
+                manana.setDate(manana.getDate() + 1);
+                const año = manana.getFullYear();
+                const mes = (manana.getMonth() + 1).toString().padStart(2, '0');
+                const dia = manana.getDate().toString().padStart(2, '0');
+                document.getElementById('order-date').value = `${año}-${mes}-${dia}`;
+                // Establecer hora por defecto (por ejemplo 12:00 PM)
+                document.getElementById('order-hr').value = '12';
+                document.getElementById('order-min').value = '00';
+                document.getElementById('order-ampm').value = 'PM';
+            }
+        });
+        return false;
+    }
+    return true;
+}
+
+function validarYEnviar() {
+    if (validarHorario()) {
+        enviarPedido();
+    }
+}
 </script>
 
 <?php include __DIR__ . '/layout/footer.php'; ?>

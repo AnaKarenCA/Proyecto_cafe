@@ -53,7 +53,10 @@ $_SESSION['idioma'] = $config['idioma'] ?? 'es';
 $_SESSION['tema'] = $config['tema'] ?? 'claro';
         header('Location: index.php?controller=welcome&action=index');
         exit;
-
+if (isset($_SESSION['pending_reservation'])) {
+        header('Location: index.php?controller=reserva&action=index');
+        exit;
+    }
     } else {
 
         $_SESSION['error'] = "Credenciales incorrectas.";

@@ -32,25 +32,32 @@ class ProductoController {
     /* =============================
        LISTA PUBLICA
     ============================= */
-    public function index(){
+   public function index(){
+    $idioma = $this->getIdioma();
+    $productos = $this->productoModel->getAll($idioma);
+    $categorias = $this->categoriaModel->getAll();
 
-        $idioma = $this->getIdioma();
-        $productos = $this->productoModel->getAll($idioma);
-        $categorias = $this->categoriaModel->getAll();
+    // Obtener datos para filtros
+    $alergenoModel = new Alergeno();
+    $tamanoModel = new Tamano();
+    $climaModel = new Clima();
 
-        require __DIR__.'/../views/productos.php';
-    }
+    $alergenos = $alergenoModel->getAll();
+    $tamanos = $tamanoModel->getAll();
+    $climas = $climaModel->getAll();
+
+    require __DIR__.'/../views/productos.php';
+}
 
     /* =============================
        DETALLE
     ============================= */
     public function show($id){
-
-        $idioma = $this->getIdioma();
-        $producto = $this->productoModel->getById($id,$idioma);
-
-        require __DIR__.'/../views/producto_detalle.php';
-    }
+    $idioma = $this->getIdioma();
+    $producto = $this->productoModel->getById($id, $idioma);
+    $ingredientes = $this->productoModel->getIngredientes($id); // Nuevo
+    require __DIR__.'/../views/producto_detalle.php';
+}
 
     /* =============================
        PANEL ADMIN
@@ -107,5 +114,6 @@ class ProductoController {
 
         header('Location:index.php?controller=producto&action=admin');
     }
+    
 
 }

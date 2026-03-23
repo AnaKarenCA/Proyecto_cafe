@@ -34,3 +34,53 @@ if (!function_exists('get_tax_name')) {
         }
     }
 }
+
+// Tasas de cambio fijas (1 MXN = X)
+$currency_rates = [
+    'es' => 1,
+    'en' => 0.056,  // 1 MXN = 0.056 USD
+    'de' => 0.048   // 1 MXN = 0.048 EUR
+];
+
+if (!function_exists('convert_currency')) {
+    function convert_currency($amountMXN) {
+        global $currency_rates;
+        $lang = $_SESSION['idioma'] ?? 'es';
+        $rate = $currency_rates[$lang] ?? 1;
+        return $amountMXN * $rate;
+    }
+}
+
+if (!function_exists('format_currency')) {
+    function format_currency($amountMXN) {
+        $lang = $_SESSION['idioma'] ?? 'es';
+        $converted = convert_currency($amountMXN);
+        $symbol = '';
+        switch ($lang) {
+            case 'es': $symbol = 'MXN'; break;
+            case 'en': $symbol = 'USD'; break;
+            case 'de': $symbol = 'EUR'; break;
+            default: $symbol = 'MXN';
+        }
+        return '$' . number_format($converted, 2) . ' ' . $symbol;
+    }
+}
+// Al final del archivo, antes de los cierres
+if (!function_exists('format_size')) {
+    function format_size($size_name) {
+        $lang = $_SESSION['idioma'] ?? 'es';
+        $sizes = [
+            'Chico' => ['ml' => 240, 'oz' => 8],
+            'Mediano' => ['ml' => 360, 'oz' => 12],
+            'Grande' => ['ml' => 480, 'oz' => 16]
+        ];
+        $size = $sizes[$size_name] ?? ['ml' => 0, 'oz' => 0];
+        
+        if ($lang === 'en') {
+            return $size['oz'] . ' fl oz';
+        } else {
+            return $size['ml'] . ' ml';
+        }
+    }
+}
+?>

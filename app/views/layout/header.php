@@ -3,7 +3,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// incluir helper de traducción
 require_once __DIR__ . '/../../helpers/i18n.php';
 
 $rol = $_SESSION['rol'] ?? null;
@@ -17,32 +16,16 @@ $idioma_actual = $_SESSION['idioma'] ?? 'es';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($titulo) ? htmlspecialchars($titulo) . ' | Omnis Café' : 'Omnis Café' ?></title>
     
-    <!-- Material Symbols -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,1"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    
-    <!-- CSS combinado (ruta relativa) -->
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <link rel="stylesheet" href="css/css.php">
 </head>
 <body>
 
-<!-- Botón de accesibilidad -->
-<div class="accessibility-toolbar">
-    <button id="accessibilityBtn" class="accessibility-btn" aria-label="<?= __('accesibilidad') ?>">
-        <img src="/img/icons/accesibilidad-icon.png" alt="<?= __('accesibilidad') ?>" class="icon-img">
-    </button>
-    <div id="accessibilityPanel" class="accessibility-panel" hidden>
-        <button id="fontIncrease"><?= __('aumentar_texto') ?></button>
-        <button id="fontDecrease"><?= __('disminuir_texto') ?></button>
-        <button id="screenReader"><?= __('leer_pantalla') ?></button>
-    </div>
-</div>
-
 <header class="main-header">
     <div class="container">
         
-        <!-- Logo -->
         <div class="logo">
             <a href="index.php?controller=welcome&action=index" class="logo-link">
                 <img src="/img/icons/logo-cafe.png" alt="Omnis Café" class="logo-img">
@@ -50,26 +33,8 @@ $idioma_actual = $_SESSION['idioma'] ?? 'es';
             </a>
         </div>
 
-        <!-- Navegación -->
         <nav class="main-nav">
             <ul class="nav-list">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle"><?= __('categorias') ?> ▼</a>
-                    <ul class="dropdown-menu">
-                        <?php
-                        require_once __DIR__ . '/../../models/Categoria.php';
-                        $catModel = new Categoria();
-                        $categorias_menu = $catModel->getAll();
-                        foreach ($categorias_menu as $cat):
-                        ?>
-                        <li>
-                            <a href="index.php?controller=categoria&action=show&id=<?= $cat['id_categoria'] ?>">
-                                <?= htmlspecialchars($cat['nombre_categoria']) ?>
-                            </a>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </li>
                 <li><a href="index.php?controller=producto&action=index"><?= __('productos') ?></a></li>
                 <li><a href="index.php?controller=reserva&action=index"><?= __('reservar_mesa') ?></a></li>
             </ul>
@@ -158,6 +123,7 @@ $idioma_actual = $_SESSION['idioma'] ?? 'es';
 
     <!-- Scripts -->
     <script src="js/cart.js"></script>
+    <script src="js/carousel.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </header>
 

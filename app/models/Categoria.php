@@ -11,9 +11,20 @@ class Categoria {
     /**
      * Obtiene todas las categorías ordenadas
      */
-    public function getAll() {
+    public function getAll($idioma = 'es') {
         $stmt = $this->db->query("SELECT * FROM categorias ORDER BY orden, nombre_categoria");
-        return $stmt->fetchAll();
+        $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Traducir cada nombre de categoría usando las claves del archivo de idioma
+        foreach ($categorias as &$cat) {
+            $key = 'categoria_' . $cat['id_categoria'];
+            $traduccion = __($key);
+            if ($traduccion !== $key) {
+                $cat['nombre_categoria'] = $traduccion;
+            }
+            // Nota: si la clave no existe, se queda con el nombre original de la BD.
+        }
+        return $categorias;
     }
 
     /**
@@ -59,4 +70,5 @@ class Categoria {
         $stmt = $this->db->prepare("DELETE FROM categorias WHERE id_categoria = :id");
         return $stmt->execute(['id' => $id]);
     }
+    
 }

@@ -68,17 +68,27 @@
 .custom-grid { display: none; }
 .custom-grid.show { display: grid; }
 .extra-checkboxes {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
     margin-top: 10px;
 }
 .extra-checkboxes label {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 5px;
-    font-size: 0.9rem;
+    gap: 8px;
     cursor: pointer;
+}
+.extra-checkboxes .extra-label {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+/* Alineación izquierda para cantidad y total */
+.quantity-control {
+    justify-content: flex-start;
+}
+.total-price {
+    text-align: left;
 }
 /* ========== TARJETAS DE TAMAÑO (efecto 3D) ========== */
 .size-cards-container {
@@ -881,4 +891,54 @@
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 8px 15px;
     margin-top: 10px;
+}/* Agregar al final del archivo */
+.custom-section {
+    margin-bottom: 20px;
+}
+.custom-section .section-label {
+    display: block;
+    margin-bottom: 10px;
+}
+.ingredients-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.ingredient-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+.ingredient-checkbox input {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--accent-warm);
+    border-radius: 4px;
+    background: var(--bg-surface);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.ingredient-checkbox input:checked {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+    position: relative;
+}
+.ingredient-checkbox input:checked::after {
+    content: "✓";
+    display: block;
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    line-height: 18px;
+}
+.ingredient-checkbox span {
+    color: var(--text-primary);
+}
+.quantity-control {
+    justify-content: flex-start; /* en lugar de center */
+}
+.total-price {
+    text-align: left; /* en lugar de center */
 }

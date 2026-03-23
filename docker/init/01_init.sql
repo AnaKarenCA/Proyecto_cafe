@@ -522,3 +522,20 @@ FOREIGN KEY (id_producto) REFERENCES productos(id_producto);
 ALTER TABLE producto_extra
 ADD CONSTRAINT fk_producto_extra_extra
 FOREIGN KEY (id_extra) REFERENCES extras(id_extra);
+
+-- 1. Agregar el Cheesecake (id 11) al clima Templado (id 4)
+INSERT INTO producto_clima (id_producto, id_clima) 
+VALUES (11, 4);
+
+-- 2. Hacer que las Bebidas Calientes (cat 1) también se recomienden en Clima Templado (id 4)
+-- Esto mejora la UX ya que el café se consume siempre.
+INSERT INTO producto_clima (id_producto, id_clima)
+SELECT id_producto, 4 FROM productos WHERE id_categoria = 1;
+
+-- 3. Hacer que la Comida y Repostería (cat 3 y 4) aparezcan también en Clima Lluvioso (id 3)
+-- "Día lluvioso = Café + Pan" es una regla de oro en IHC.
+INSERT INTO producto_clima (id_producto, id_clima)
+SELECT id_producto, 3 FROM productos WHERE id_categoria IN (3, 4);
+
+-- 4. Limpieza: Si por error algún ID se duplicó, puedes verificar con:
+-- SELECT id_producto, COUNT(*) FROM producto_clima GROUP BY id_producto, id_clima HAVING COUNT(*) > 1;

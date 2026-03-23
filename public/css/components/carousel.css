@@ -1,29 +1,21 @@
 /* ========== CARRUSEL ========== */
-.carousel-section {
-    margin: 20px 0;
+.carousel-container {
     position: relative;
     width: 100%;
+    height: 600px; /* Aumentado */
+    background: var(--bg-surface);
+    box-shadow: 0 30px 50px var(--shadow);
+    border-radius: var(--border-radius);
     overflow: hidden;
 }
 
-.carousel-new {
-    position: relative;
-    width: 100%;
-    height: 500px;
-    background: var(--bg-light);
-    box-shadow: 0 30px 50px var(--shadow);
-    border-radius: var(--border-radius);
-}
-
-.carousel-new .slides {
+.carousel-slides {
     position: relative;
     width: 100%;
     height: 100%;
-    border-radius: var(--border-radius);
-    overflow: hidden;
 }
 
-.carousel-new .slide-item {
+.carousel-slide {
     position: absolute;
     top: 50%;
     left: 0;
@@ -36,10 +28,11 @@
     box-shadow: 0 30px 50px var(--shadow);
     transition: all 0.5s ease;
     list-style: none;
+    cursor: pointer; /* Indicar que es clickeable */
 }
 
-.carousel-new .slide-item:nth-child(1),
-.carousel-new .slide-item:nth-child(2) {
+.carousel-slide:nth-child(1),
+.carousel-slide:nth-child(2) {
     top: 0;
     left: 0;
     transform: translate(0, 0);
@@ -49,21 +42,21 @@
     box-shadow: none;
 }
 
-.carousel-new .slide-item:nth-child(3) {
+.carousel-slide:nth-child(3) {
     left: 50%;
 }
-.carousel-new .slide-item:nth-child(4) {
+.carousel-slide:nth-child(4) {
     left: calc(50% + 220px);
 }
-.carousel-new .slide-item:nth-child(5) {
+.carousel-slide:nth-child(5) {
     left: calc(50% + 440px);
 }
-.carousel-new .slide-item:nth-child(n+6) {
+.carousel-slide:nth-child(n+6) {
     left: calc(50% + 660px);
     opacity: 0;
 }
 
-.carousel-new .slide-item:nth-child(2)::after {
+.carousel-slide:nth-child(2)::after {
     content: '';
     position: absolute;
     top: 0;
@@ -76,12 +69,12 @@
     border-radius: inherit;
 }
 
-.carousel-new .slide-item .content {
+.carousel-slide .carousel-content {
     position: absolute;
     top: 50%;
     left: 100px;
     transform: translateY(-50%);
-    width: 1000px;
+    width: 60%;
     text-align: left;
     color: white;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
@@ -89,11 +82,11 @@
     z-index: 2;
 }
 
-.carousel-new .slide-item:nth-child(2) .content {
+.carousel-slide:nth-child(2) .carousel-content {
     display: block;
 }
 
-.carousel-new .content .name {
+.carousel-content .carousel-name {
     font-size: 3rem;
     font-weight: bold;
     text-transform: uppercase;
@@ -102,7 +95,7 @@
     color: white;
 }
 
-.carousel-new .content .des {
+.carousel-content .carousel-des {
     margin-top: 10px;
     margin-bottom: 20px;
     font-size: 1.1rem;
@@ -111,23 +104,25 @@
     color: white;
 }
 
-.carousel-new .content button {
+.carousel-content .carousel-btn {
+    display: inline-block;
     padding: 10px 20px;
     border: none;
     border-radius: var(--border-radius);
     background-color: rgba(255, 255, 255, 0.9);
-    color: #1e2a24;
+    color: var(--text-dark);
     font-weight: bold;
     cursor: pointer;
     opacity: 0;
     animation: slideContent 1s ease-in-out 0.6s forwards;
     transition: background-color 0.3s, transform 0.1s;
+    text-decoration: none;
     min-width: var(--touch-size);
     min-height: var(--touch-size);
+    text-align: center;
 }
 
-.carousel-new .content button:hover,
-.carousel-new .content button:focus {
+.carousel-content .carousel-btn:hover {
     background-color: white;
     transform: scale(1.05);
     outline: 2px solid var(--accent-strong);
@@ -146,9 +141,9 @@
     }
 }
 
-.carousel-controls {
+.carousel-nav {
     position: absolute;
-    bottom: 20px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -158,13 +153,13 @@
 
 .carousel-prev,
 .carousel-next {
-    width: 44px;
-    height: 44px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     border: 2px solid var(--black);
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.8);
     color: var(--black);
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     cursor: pointer;
     transition: all 0.3s;
     display: flex;
@@ -174,11 +169,26 @@
 }
 
 .carousel-prev:hover,
-.carousel-next:hover,
-.carousel-prev:focus,
-.carousel-next:focus {
+.carousel-next:hover {
     background-color: white;
     transform: scale(1.1);
     border-color: var(--accent-strong);
     outline: 2px solid var(--accent-strong);
+}
+
+.carousel-title {
+    margin-bottom: 20px;
+    color: var(--text-primary);
+    font-size: 2rem;
+    text-align: center;
+}
+
+.climate-highlight {
+    background: var(--accent-strong);
+    color: white;
+    padding: 0.3rem 1.5rem;
+    border-radius: 40px;
+    display: inline-block;
+    margin-left: 15px;
+    font-size: 1.3rem;
 }

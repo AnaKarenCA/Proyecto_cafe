@@ -1,0 +1,157 @@
+/* ========== CATEGORÍA: TARJETAS DE PRODUCTO (estilo tarjeta) ========== */
+.productos-grid-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.el-wrapper {
+    width: 300px;
+    background-color: var(--bg-surface);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 10px var(--shadow);
+}
+
+.el-wrapper:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px var(--shadow);
+}
+
+.el-wrapper .box-up {
+    position: relative;
+    overflow: hidden;
+    height: 280px;
+    text-align: center;
+    background: var(--bg-light);
+}
+
+.el-wrapper .img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.8s cubic-bezier(0, 0, 0.18, 1);
+}
+
+.el-wrapper:hover .img {
+    filter: blur(7px);
+    opacity: 0.4;
+}
+
+.el-wrapper .img-info {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: var(--text-dark);
+    opacity: 0;
+    transition: all 0.4s ease;
+    padding: 10px;
+}
+
+.el-wrapper:hover .img-info {
+    opacity: 1;
+    bottom: 40px;
+}
+
+.info-inner .p-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    display: block;
+}
+
+.info-inner .p-company {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: block;
+}
+
+.a-size {
+    font-size: 0.9rem;
+    color: var(--accent-strong);
+    margin-top: 5px;
+}
+
+.el-wrapper .box-down {
+    position: relative;
+    height: 80px;
+    background: var(--bg-elevated);
+}
+
+.h-bg {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--accent-strong);
+    transition: left 0.5s ease;
+}
+
+.h-bg-inner {
+    width: 50%;
+    height: 100%;
+    background: var(--accent-warm);
+}
+
+.el-wrapper:hover .h-bg {
+    left: 0;
+}
+
+.cart {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.cart .price {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text-light);
+    transition: left 0.3s ease;
+    opacity: 0.9;
+}
+
+.el-wrapper:hover .cart .price {
+    left: 15px;
+    color: var(--text-light);
+}
+
+.cart .add-to-cart {
+    position: absolute;
+    top: 50%;
+    left: 110%;
+    transform: translateY(-50%);
+    transition: left 0.3s ease;
+    background: var(--accent-warm);
+    padding: 6px 12px;
+    border-radius: 30px;
+    white-space: nowrap;
+}
+
+.el-wrapper:hover .cart .add-to-cart {
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.cart .add-to-cart .txt {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}

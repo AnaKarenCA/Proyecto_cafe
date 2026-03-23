@@ -28,7 +28,10 @@ $files = [
     'components/theme-switch.css',
     'layout/menu.css',
     'pages/carrito.css', 
-    'responsive.css'
+    'responsive.css',
+     'components/weather-card.css',
+    'components/top-products.css',
+     'pages/categoria.css',
 ];
 
 foreach ($files as $file) {

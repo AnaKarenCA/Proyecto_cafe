@@ -188,73 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 500);
     }
 
-    // ========== CARRUSEL ==========
-    (function() {
-        const next = document.querySelector('.carousel-next');
-        const prev = document.querySelector('.carousel-prev');
-        const slides = document.querySelector('.carousel-new .slides');
-        
-        if (!next || !prev || !slides) return;
 
-        function updateMainSlide() {
-            const items = document.querySelectorAll('.carousel-new .slide-item');
-            items.forEach((item, index) => {
-                if (index === 1) {
-                    item.classList.add('main');
-                } else {
-                    item.classList.remove('main');
-                }
-            });
-        }
-
-        function moveNext() {
-            const items = document.querySelectorAll('.carousel-new .slide-item');
-            if (items.length) {
-                slides.appendChild(items[0]);
-                updateMainSlide();
-            }
-        }
-
-        function movePrev() {
-            const items = document.querySelectorAll('.carousel-new .slide-item');
-            if (items.length) {
-                slides.prepend(items[items.length - 1]);
-                updateMainSlide();
-            }
-        }
-
-        function moveSlideToMain(targetSlide) {
-            const items = Array.from(document.querySelectorAll('.carousel-new .slide-item'));
-            const targetIndex = items.indexOf(targetSlide);
-            if (targetIndex === -1 || targetIndex === 1) return;
-
-            if (targetIndex < 1) {
-                const steps = 1 - targetIndex;
-                for (let i = 0; i < steps; i++) {
-                    movePrev();
-                }
-            } else {
-                const steps = targetIndex - 1;
-                for (let i = 0; i < steps; i++) {
-                    moveNext();
-                }
-            }
-        }
-
-        next.addEventListener('click', moveNext);
-        prev.addEventListener('click', movePrev);
-        updateMainSlide();
-
-        slides.addEventListener('click', function(e) {
-            const slide = e.target.closest('.slide-item');
-            if (slide) {
-                if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.tagName === 'A' || e.target.closest('a')) {
-                    return;
-                }
-                moveSlideToMain(slide);
-            }
-        });
-    })();
 
     // ========== CONFIRMACIÓN PARA ELIMINAR ==========
     const removeLinks = document.querySelectorAll('.remove-link');
