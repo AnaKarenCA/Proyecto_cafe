@@ -1,4 +1,4 @@
 <?php
 // config/weather.php
-define('OPENWEATHER_API_KEY', 'bb438b7f5af8910d4927226bb7f8f755');
+define('OPENWEATHER_API_KEY', '123456789101213141516171819122122');
 ?>
